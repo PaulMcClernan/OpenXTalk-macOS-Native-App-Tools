@@ -1,0 +1,156 @@
+library net.freelibs.macostools
+
+use com.livecode.foreign
+use com.livecode.objc
+
+metadata version is "1.0.0"
+metadata author is "Shaosean, Paul McClernan"
+metadata title is "macOS Tools library"
+
+--------------------- foreign handlers
+
+private foreign handler NSApplicationSharedApplication() returns ObjcId binds to "objc:NSApplication.+sharedApplication"
+private foreign handler NSApplicationWindowWithWindowNumber(in sharedApplication as ObjcId, in windowNumber as CLong) returns ObjcId binds to "objc:NSApplication.-windowWithWindowNumber:"
+private foreign handler NSApplicationRequestUserAttention(in sharedApplication as ObjcId, in requestType as CLong) returns CLong binds to "objc:NSApplication.-requestUserAttention:"
+
+private foreign handler NSWindowSetCollectionBehavior(in aNSWindow as ObjcId, in collectionBehavior as CLong) returns nothing binds to "objc:NSWindow.-setCollectionBehavior:"
+private foreign handler NSWindowGetCollectionBehavior(in aNSWindow as ObjcId) returns CLong binds to "objc:NSWindow.-collectionBehavior"
+private foreign handler NSWindowToggleFullScreen(in aNSWindow as ObjcId) returns nothing binds to "objc:NSWindow.-toggleFullScreen:"
+
+private foreign handler NSUserNotificationCenterDefaultUserNotificationCenter() returns ObjcId binds to "objc:NSUserNotificationCenter.+defaultUserNotificationCenter"
+private foreign handler NSUserNotificationAlloc() returns ObjcRetainedId binds to "objc:NSUserNotification.+alloc"
+private foreign handler NSUserNotificationInit(in anInstance as ObjcId) returns ObjcId binds to "objc:NSUserNotification.-init"
+private foreign handler NSUserNotificationSetProperty(in Obj as ObjcId, in pValue as ObjcId, in pProp as ObjcId) returns nothing binds to "objc:NSUserNotification.-setValue:forKey:"
+private foreign handler NSUserNotificationCenterDeliverNotification(in defaultUserNotificationCenter as ObjcId, in aNotificationInstance as ObjcId) returns nothing binds to "objc:NSUserNotificationCenter.-deliverNotification:"
+
+private foreign handler NSDistributedNotificationCenterDefaultCenter() returns ObjcId binds to "objc:NSDistributedNotificationCenter.+defaultCenter"
+private foreign handler NSDistributedNotificationCenterPostNotificationNameObject(in defaultCenter as ObjcId, in notificationName as ObjcId, in notificationObject as ObjcId) returns nothing binds to "objc:NSDistributedNotificationCenter.-postNotificationName:object:"
+
+--------------------- Private handlers
+
+private unsafe handler _NSWindowFromWindowID(in windowID as Integer) returns ObjcId
+	variable NSSharedApplication as ObjcId
+	put NSApplicationSharedApplication() into NSSharedApplication
+
+	variable aNSWindow as ObjcId
+	put NSApplicationWindowWithWindowNumber(NSSharedApplication, windowID) into aNSWindow
+
+	return aNSWindow
+end handler
+
+
+private unsafe handler _NSWindowGetCollectionBehavior(in aNSWindow as ObjcId) returns CLong
+	variable collectionBehavior as CLong
+	put NSWindowGetCollectionBehavior(aNSWindow) into collectionBehavior
+
+	return collectionBehavior
+end handler
+
+
+
+--------------------- Public handlers
+
+public unsafe handler RequestUserAttention(in criticalRequest as Boolean) returns nothing
+	if (the operating system is "mac") then
+		variable sharedApplication as ObjcId
+		put NSApplicationSharedApplication() into sharedApplication
+
+		variable tResults as CLong
+		if (criticalRequest) then
+			put NSApplicationRequestUserAttention(sharedApplication, 0) into tResults
+		else
+			put NSApplicationRequestUserAttention(sharedApplication, 10) into tResults
+		end if
+	end if
+end handler
+
+
+
+public unsafe handler DownloadFileFinished(in pathToFile as String) returns nothing
+	if (the operating system is "mac") then
+		variable defaultCenter as ObjcId
+		put NSDistributedNotificationCenterDefaultCenter() into defaultCenter
+
+		NSDistributedNotificationCenterPostNotificationNameObject(defaultCenter, StringToNSString("com.apple.DownloadFileFinished"), StringToNSString(pathToFile))
+	end if
+end handler
+
+
+
+public unsafe handler FullScreenAllowed(in windowID as Integer, in inValue as Boolean) returns nothing
+	if (the operating system is "mac") then
+		variable aNSWindow as ObjcId
+		put _NSWindowFromWindowID(windowID) into aNSWindow
+
+		variable collectionBehavior as CLong
+		put _NSWindowGetCollectionBehavior(aNSWindow) into collectionBehavior
+
+		if inValue then
+			put collectionBehavior bitwise or 128 into collectionBehavior
+		else
+			put collectionBehavior bitwise and (bitwise not 128) into collectionBehavior
+		end if
+
+		NSWindowSetCollectionBehavior(aNSWindow, collectionBehavior)
+	end if
+end handler
+
+
+
+public unsafe handler IsFullScreenAllowed(in windowID as Integer) returns Boolean
+	if (the operating system is "mac") then
+		variable aNSWindow as ObjcId
+		put _NSWindowFromWindowID(windowID) into aNSWindow
+
+		variable collectionBehavior as Clong
+		put _NSWindowGetCollectionBehavior(aNSWindow) into collectionBehavior
+		put collectionBehavior bitwise and 128 into collectionBehavior
+
+		if (collectionBehavior = 0) then
+			return false
+		else
+			return true
+		end if
+	end if
+end handler
+
+
+
+public unsafe handler ToggleFullScreen(in windowID as Integer) returns nothing
+	if (the operating system is "mac") then
+		variable aNSWindow as ObjcId
+		put _NSWindowFromWindowID(windowID) into aNSWindow
+
+		NSWindowToggleFullScreen(aNSWindow)
+	end if
+end handler
+
+ublic unsafe handler PostUserNotification(in postTitle as String, in subTitle as optional String, in informativeText as optional String, in postIdentifier as optional String, in soundName as optional String) returns nothing
+	if (the operating system is "mac") then
+		variable defaultUserNotificationCenter as ObjcId
+		put NSUserNotificationCenterDefaultUserNotificationCenter() into defaultUserNotificationCenter
+
+		variable aNSUserNotification as ObjcObject
+		put NSUserNotificationAlloc() into aNSUserNotification
+		put NSUserNotificationInit(aNSUserNotification) into aNSUserNotification
+
+		NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(postTitle), StringToNSString("title"))
+		if (subTitle is not nothing) then
+			NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(subTitle), StringToNSString("subtitle"))
+		end if
+		if (informativeText is not nothing) then
+			NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(informativeText), StringToNSString("informativeText"))
+		end if
+		if (postIdentifier is not nothing) then
+			NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(postIdentifier), StringToNSString("identifier"))
+		end if
+		if (soundName is empty) then
+			-- don't add soundName
+		else if (soundName is not nothing) then
+			NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(soundName), StringToNSString("soundName"))
+		end if
+		NSUserNotificationCenterDeliverNotification(defaultUserNotificationCenter, aNSUserNotification)
+	end if
+end handler
+
+end library
