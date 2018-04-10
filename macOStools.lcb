@@ -27,6 +27,11 @@ private foreign handler NSUserNotificationCenterDeliverNotification(in defaultUs
 private foreign handler NSDistributedNotificationCenterDefaultCenter() returns ObjcId binds to "objc:NSDistributedNotificationCenter.+defaultCenter"
 private foreign handler NSDistributedNotificationCenterPostNotificationNameObject(in defaultCenter as ObjcId, in notificationName as ObjcId, in notificationObject as ObjcId) returns nothing binds to "objc:NSDistributedNotificationCenter.-postNotificationName:object:"
 
+private foreign handler NSApplicationMiniaturizeAll ( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
+
+private foreign handler NSApplicationHide ( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-hide:"
+private foreign handler NSApplicationUnhide ( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-unhide:"
+
 --------------------- Private handlers
 
 private unsafe handler _NSWindowFromWindowID(in windowID as Integer) returns ObjcId
@@ -151,6 +156,31 @@ public unsafe handler PostUserNotification(in postTitle as String, in subTitle a
 			NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(soundName), StringToNSString("soundName"))
 		end if
 		NSUserNotificationCenterDeliverNotification(defaultUserNotificationCenter, aNSUserNotification)
+	end if
+end handler
+
+public unsafe handler MiniaturizeAll() returns nothing
+	if (the operating system is "mac") then
+		variable sharedApplication as ObjcId
+		put NSApplicationSharedApplication() into sharedApplication
+		variable tResults as CLong
+			put NSApplicationMiniaturizeAll(sharedApplication) into tResults
+	end if
+end handler
+
+public unsafe handler AppHide() returns nothing
+	if (the operating system is "mac") then
+		variable sharedApplication as ObjcId
+		put NSApplicationSharedApplication() into sharedApplication
+		NSApplicationHide(sharedApplication)
+	end if
+end handler
+
+public unsafe handler AppUnhide() returns nothing
+	if (the operating system is "mac") then
+		variable sharedApplication as ObjcId
+		put NSApplicationSharedApplication() into sharedApplication
+		NSApplicationUnhide(sharedApplication)
 	end if
 end handler
 
