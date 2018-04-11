@@ -1,4 +1,14 @@
-library net.freelibs.macostools
+/**
+This Library is a collection of macOS Cocoa AppKit related LCB FFI wrappers.
+
+Description:
+A collection of macOS Cocoa AppKit related handlers
+
+>*Note:* This library is MIT licensed (permissive).
+> Please share and share a like.
+*/
+
+library community.macostools.paulmcclernan
 
 use com.livecode.foreign
 use com.livecode.objc
@@ -44,7 +54,6 @@ private unsafe handler _NSWindowFromWindowID(in windowID as Integer) returns Obj
 	return aNSWindow
 end handler
 
-
 private unsafe handler _NSWindowGetCollectionBehavior(in aNSWindow as ObjcId) returns CLong
 	variable collectionBehavior as CLong
 	put NSWindowGetCollectionBehavior(aNSWindow) into collectionBehavior
@@ -52,10 +61,28 @@ private unsafe handler _NSWindowGetCollectionBehavior(in aNSWindow as ObjcId) re
 	return collectionBehavior
 end handler
 
-
-
 --------------------- Public handlers
 
+/**
+When the app is in the background, RequestUserAttention calls for user
+attention by bouncy the App's icon in the Dock
+
+Example:
+	wait 5 with messages
+	do "tell Finder to activate" as AppleSCript
+	RequestUserAttention TRUE
+
+Parameters:
+isCritical:  boolean that sets wether or not attention is immediately needed.
+-TRUE - the user attention request is a critical request. The dock icon will continue to bounce until the application is brought forward.
+-FALSE - the user attention request is an informational request. The dock icon will bounce once.
+
+Description:
+When the app is in the background <RequestUserAttention> will call for the users
+attention by bouncy the App's icon in the Dock. If <isCritical> is false it will
+bounce the icon only once, otherwise the icon will continue to bounce until
+the app is the active foreground app.
+*/
 public unsafe handler RequestUserAttention(in criticalRequest as Boolean) returns nothing
 	if (the operating system is "mac") then
 		variable sharedApplication as ObjcId
@@ -70,8 +97,6 @@ public unsafe handler RequestUserAttention(in criticalRequest as Boolean) return
 	end if
 end handler
 
-
-
 public unsafe handler DownloadFileFinished(in pathToFile as String) returns nothing
 	if (the operating system is "mac") then
 		variable defaultCenter as ObjcId
@@ -80,8 +105,6 @@ public unsafe handler DownloadFileFinished(in pathToFile as String) returns noth
 		NSDistributedNotificationCenterPostNotificationNameObject(defaultCenter, StringToNSString("com.apple.DownloadFileFinished"), StringToNSString(pathToFile))
 	end if
 end handler
-
-
 
 public unsafe handler FullScreenAllowed(in windowID as Integer, in inValue as Boolean) returns nothing
 	if (the operating system is "mac") then
@@ -101,8 +124,6 @@ public unsafe handler FullScreenAllowed(in windowID as Integer, in inValue as Bo
 	end if
 end handler
 
-
-
 public unsafe handler IsFullScreenAllowed(in windowID as Integer) returns Boolean
 	if (the operating system is "mac") then
 		variable aNSWindow as ObjcId
@@ -119,8 +140,6 @@ public unsafe handler IsFullScreenAllowed(in windowID as Integer) returns Boolea
 		end if
 	end if
 end handler
-
-
 
 public unsafe handler ToggleFullScreen(in windowID as Integer) returns nothing
 	if (the operating system is "mac") then
