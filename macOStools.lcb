@@ -37,7 +37,10 @@ private foreign handler NSUserNotificationCenterDeliverNotification(in defaultUs
 private foreign handler NSDistributedNotificationCenterDefaultCenter() returns ObjcId binds to "objc:NSDistributedNotificationCenter.+defaultCenter"
 private foreign handler NSDistributedNotificationCenterPostNotificationNameObject(in defaultCenter as ObjcId, in notificationName as ObjcId, in notificationObject as ObjcId) returns nothing binds to "objc:NSDistributedNotificationCenter.-postNotificationName:object:"
 
-private foreign handler NSApplicationMiniaturizeAll ( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
+private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
+private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
+
+private foreign handler NSApplicationMiniaturizeAll( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
 
 private foreign handler NSApplicationHide ( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-hide:"
 private foreign handler NSApplicationUnhide ( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-unhide:"
@@ -65,6 +68,23 @@ end handler
 ----------------------------- Public handlers ----------------------------------
 
 --------------------------------------------------------------------------------
+
+
+public handler setAppDockIcon(in pathToFile as String) returns nothing
+	if (the operating system is "mac") then
+		unsafe
+		variable sharedApplication as ObjcId
+		put NSApplicationSharedApplication() into sharedApplication
+		variable tNSImage as ObjcId
+		put NSImageInitFromFile(StringToNSString(pathToFile)) into tNSImage
+		variable tResult as ObjcId
+	 	put NSApplicationSetAppIconImage(sharedApplication, tNSImage) into tResult
+		--NSApplicationSetAppIconImage(tNSImage)
+		end unsafe
+	end if
+end handler
+
+
 /**
 When the app is in the background, RequestUserAttention calls for user
 attention by bouncy the App's icon in the Dock
