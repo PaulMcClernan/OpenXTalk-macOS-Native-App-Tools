@@ -24,6 +24,10 @@ private foreign handler NSApplicationSharedApplication() returns ObjcId binds to
 private foreign handler NSApplicationWindowWithWindowNumber(in sharedApplication as ObjcId, in windowNumber as CLong) returns ObjcId binds to "objc:NSApplication.-windowWithWindowNumber:"
 private foreign handler NSApplicationRequestUserAttention(in sharedApplication as ObjcId, in requestType as CLong) returns CLong binds to "objc:NSApplication.-requestUserAttention:"
 
+-- private foreign handler NSDockTileAlloc() returns ObjcRetainedId binds to "objc:NSDockTile.+alloc"
+private foreign handler NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcRetainedId binds to "objc:NSApplication.-dockTile"
+private foreign handler NSDockTileBadgeLabel(in pNSDockTile as ObjcId, in pNSString as ObjcId) returns CLong binds to "objc:NSDockTile.-badgeLabel:"
+
 private foreign handler NSWindowSetCollectionBehavior(in aNSWindow as ObjcId, in collectionBehavior as CLong) returns nothing binds to "objc:NSWindow.-setCollectionBehavior:"
 private foreign handler NSWindowGetCollectionBehavior(in aNSWindow as ObjcId) returns CLong binds to "objc:NSWindow.-collectionBehavior"
 private foreign handler NSWindowToggleFullScreen(in aNSWindow as ObjcId) returns nothing binds to "objc:NSWindow.-toggleFullScreen:"
@@ -38,6 +42,7 @@ private foreign handler NSDistributedNotificationCenterDefaultCenter() returns O
 private foreign handler NSDistributedNotificationCenterPostNotificationNameObject(in defaultCenter as ObjcId, in notificationName as ObjcId, in notificationObject as ObjcId) returns nothing binds to "objc:NSDistributedNotificationCenter.-postNotificationName:object:"
 
 private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
+
 private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
 
 private foreign handler NSApplicationMiniaturizeAll( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
@@ -70,16 +75,22 @@ end handler
 --------------------------------------------------------------------------------
 
 
-public handler setAppDockIcon(in pathToFile as String) returns nothing
+public handler setDockTileBadge(in pLabel as String) returns ObjcId
 	if (the operating system is "mac") then
 		unsafe
 		variable sharedApplication as ObjcId
 		put NSApplicationSharedApplication() into sharedApplication
-		variable tNSImage as ObjcId
-		put NSImageInitFromFile(StringToNSString(pathToFile)) into tNSImage
-		variable tResult as ObjcId
-	 	put NSApplicationSetAppIconImage(sharedApplication, tNSImage) into tResult
-		--NSApplicationSetAppIconImage(tNSImage)
+		variable tNSDockTile as ObjcId
+-- put NSApplicationGetNSDockTile() into tNSDockTile
+  		put NSApplicationGetNSDockTile(sharedApplication) into tNSDockTile
+		variable tLabelNSSTr as ObjcId
+		variable tErr as any
+		put NSDockTileBadgeLabel(tNSDockTile,StringToNSString(pLabel)) into tErr
+		-- var badgeLabel: String?
+		-- put NSImageInitFromFile(StringToNSString(pathToFile)) into tNSImage
+		-- variable tResult as ObjcId
+	   -- put NSApplicationSetAppIconImage(sharedApplication, tNSImage) into tResult
+		-- NSApplicationSetAppIconImage(tNSImage)
 		end unsafe
 	end if
 end handler
