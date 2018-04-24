@@ -24,13 +24,15 @@ private foreign handler NSApplicationSharedApplication() returns ObjcId binds to
 private foreign handler NSApplicationWindowWithWindowNumber(in sharedApplication as ObjcId, in windowNumber as CLong) returns ObjcId binds to "objc:NSApplication.-windowWithWindowNumber:"
 private foreign handler NSApplicationRequestUserAttention(in sharedApplication as ObjcId, in requestType as CLong) returns CLong binds to "objc:NSApplication.-requestUserAttention:"
 
--- private foreign handler NSDockTileAlloc() returns ObjcRetainedId binds to "objc:NSDockTile.+alloc"
-private foreign handler NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcRetainedId binds to "objc:NSApplication.-dockTile"
-private foreign handler NSDockTileBadgeLabel(in pNSDockTile as ObjcId, in pNSString as ObjcId) returns CLong binds to "objc:NSDockTile.-badgeLabel:"
-
 private foreign handler NSWindowSetCollectionBehavior(in aNSWindow as ObjcId, in collectionBehavior as CLong) returns nothing binds to "objc:NSWindow.-setCollectionBehavior:"
 private foreign handler NSWindowGetCollectionBehavior(in aNSWindow as ObjcId) returns CLong binds to "objc:NSWindow.-collectionBehavior"
 private foreign handler NSWindowToggleFullScreen(in aNSWindow as ObjcId) returns nothing binds to "objc:NSWindow.-toggleFullScreen:"
+
+-- private foreign handler NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcId binds to "objc:NSWindow.-dockTile"
+private foreign handler NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcId binds to "objc:NSApplication.-dockTile"
+private foreign handler NSDockTileSetBadgeLabelProp(in pNSDockTile as ObjcId, in pNSString as ObjcId, in pSelectorNSString as ObjcId ) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
+private foreign handler NSDockTileSetShowAppBadge(in pNSDockTile as ObjcId, in pValue as cBool, in pSelectorNSString as ObjcId) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
+private foreign handler NSDockTileDisplay(in pNSDockTile as ObjcId) returns nothing binds to "objc:NSDockTile.-display"
 
 private foreign handler NSUserNotificationCenterDefaultUserNotificationCenter() returns ObjcId binds to "objc:NSUserNotificationCenter.+defaultUserNotificationCenter"
 private foreign handler NSUserNotificationAlloc() returns ObjcRetainedId binds to "objc:NSUserNotification.+alloc"
@@ -43,7 +45,7 @@ private foreign handler NSDistributedNotificationCenterPostNotificationNameObjec
 
 private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
 
-private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
+--private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
 
 private foreign handler NSApplicationMiniaturizeAll( in sharedApplication as ObjcId ) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
 
@@ -73,28 +75,19 @@ end handler
 ----------------------------- Public handlers ----------------------------------
 
 --------------------------------------------------------------------------------
-
-
-public handler setDockTileBadge(in pLabel as String) returns ObjcId
+public handler setDockTileBadge(in pLabel as String) returns nothing
 	if (the operating system is "mac") then
 		unsafe
 		variable sharedApplication as ObjcId
 		put NSApplicationSharedApplication() into sharedApplication
 		variable tNSDockTile as ObjcId
--- put NSApplicationGetNSDockTile() into tNSDockTile
   		put NSApplicationGetNSDockTile(sharedApplication) into tNSDockTile
-		variable tLabelNSSTr as ObjcId
-		variable tErr as any
-		put NSDockTileBadgeLabel(tNSDockTile,StringToNSString(pLabel)) into tErr
-		-- var badgeLabel: String?
-		-- put NSImageInitFromFile(StringToNSString(pathToFile)) into tNSImage
-		-- variable tResult as ObjcId
-	   -- put NSApplicationSetAppIconImage(sharedApplication, tNSImage) into tResult
-		-- NSApplicationSetAppIconImage(tNSImage)
+		NSDockTileSetShowAppBadge(tNSDockTile, true, StringToNSString("showsApplicationBadge"))
+		NSDockTileSetBadgeLabelProp(tNSDockTile,StringToNSString(pLabel),StringToNSString("badgeLabel"))
+		NSDockTileDisplay(tNSDockTile)
 		end unsafe
 	end if
 end handler
-
 
 /**
 When the app is in the background, RequestUserAttention calls for user
