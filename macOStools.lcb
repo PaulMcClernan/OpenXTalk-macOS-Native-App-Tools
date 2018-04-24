@@ -85,10 +85,10 @@ Parameters:
 badgeText (string): a small string of text to badge the app's dock icon with.
 
 Description:
-Badge the App's Dock Icon with a small string of text, if the string is
+Badge the App's Dock Icon with a small string of text. If badgeText string is
 too long it will be automatically truncated to fit.
 */
-public handler setDockTileBadge(in pLabel as String) returns nothing
+public handler setDockTileBadge(in badgeText as String) returns nothing
 	if (the operating system is "mac") then
 		unsafe
 		variable sharedApplication as ObjcId
@@ -96,7 +96,7 @@ public handler setDockTileBadge(in pLabel as String) returns nothing
 		variable tNSDockTile as ObjcId
   		put NSApplicationGetNSDockTile(sharedApplication) into tNSDockTile
 		NSDockTileSetShowAppBadge(tNSDockTile, true, StringToNSString("showsApplicationBadge"))
-		NSDockTileSetBadgeLabelProp(tNSDockTile,StringToNSString(pLabel),StringToNSString("badgeLabel"))
+		NSDockTileSetBadgeLabelProp(tNSDockTile,StringToNSString(badgeText),StringToNSString("badgeLabel"))
 		NSDockTileDisplay(tNSDockTile)
 		end unsafe
 	end if
