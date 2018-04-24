@@ -28,7 +28,6 @@ private foreign handler NSWindowSetCollectionBehavior(in aNSWindow as ObjcId, in
 private foreign handler NSWindowGetCollectionBehavior(in aNSWindow as ObjcId) returns CLong binds to "objc:NSWindow.-collectionBehavior"
 private foreign handler NSWindowToggleFullScreen(in aNSWindow as ObjcId) returns nothing binds to "objc:NSWindow.-toggleFullScreen:"
 
--- private foreign handler NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcId binds to "objc:NSWindow.-dockTile"
 private foreign handler NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcId binds to "objc:NSApplication.-dockTile"
 private foreign handler NSDockTileSetBadgeLabelProp(in pNSDockTile as ObjcId, in pNSString as ObjcId, in pSelectorNSString as ObjcId ) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
 private foreign handler NSDockTileSetShowAppBadge(in pNSDockTile as ObjcId, in pValue as cBool, in pSelectorNSString as ObjcId) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
@@ -75,6 +74,20 @@ end handler
 ----------------------------- Public handlers ----------------------------------
 
 --------------------------------------------------------------------------------
+
+/**
+Badge the App's Dock Icon with a small string of text.
+
+Example:
+setDockTileBadge "Hello"
+
+Parameters:
+badgeText (string): a small string of text to badge the app's dock icon with.
+
+Description:
+Badge the App's Dock Icon with a small string of text, if the string is
+too long it will be automatically truncated to fit.
+*/
 public handler setDockTileBadge(in pLabel as String) returns nothing
 	if (the operating system is "mac") then
 		unsafe
