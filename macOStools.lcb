@@ -47,6 +47,7 @@ private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns 
 --private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
 
 private foreign handler NSApplicationMiniaturizeAll( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
+private foreign handler NSWindowPerformMiniaturize(in aNSWindow as optional ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSWindow.-performMiniaturize:" -- (void)performMiniaturize:(id)sender;
 
 private foreign handler NSApplicationHide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-hide:"
 private foreign handler NSApplicationUnhide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-unhide:"
@@ -240,6 +241,16 @@ public handler ToggleFullScreen(in windowID as Integer) returns nothing
 		end unsafe
 	end if
 end handler
+
+public handler PerformMiniaturize(in windowID as Integer) returns nothing
+	if (the operating system is "mac") then
+		variable aNSWindow as ObjcId
+		unsafe
+			put _NSWindowFromWindowID(windowID) into aNSWindow
+			NSWindowPerformMiniaturize(aNSWindow, nothing)
+		end unsafe
+	end if
+end handler
 --------------------------------------------------------------------------------
 /**
 Creates macOS notification center notes
@@ -347,14 +358,17 @@ AppUnhide
 
 Description:
 Unhides the app revealing any document windows that were hidden, but it does not
-activating the app which remains in the background.
+activate the app which remains in the background.
 */
 public handler AppUnhide() returns nothing
+--- public handler AppUnhide(in windowID as Integer) returns nothing
 	if (the operating system is "mac") then
 		unsafe
 			variable sharedApplication as ObjcId
+			-- variable aNSWindow as ObjcId
+			-- put _NSWindowFromWindowID(windowID) into aNSWindow
 			put NSApplicationSharedApplication() into sharedApplication
-			NSApplicationUnhide(sharedApplication, nothing)
+			NSApplicationUnhide(sharedApplication, sharedApplication)
 		end unsafe
 	end if
 end handler
