@@ -46,9 +46,11 @@ private foreign handler NSDistributedNotificationCenterPostNotificationNameObjec
 private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
 --private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
 
-private foreign handler NSApplicationMiniaturizeAll( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
-private foreign handler NSWindowPerformMiniaturize(in aNSWindow as optional ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSWindow.-performMiniaturize:" -- (void)performMiniaturize:(id)sender;
-
+private foreign handler NSApplicationMiniaturizeAll( in sharedApplication as optional ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
+private foreign handler NSWindowPerformMiniaturize(in aNSWindow as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSWindow.-performMiniaturize:" -- (void)performMiniaturize:(id)sender;
+private foreign handler NSWindowDeminiaturize(in aNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-deminiaturize:"
+private foreign handler NSWindowIsMiniaturized(in aNSWindow as ObjcId) returns CBool binds to "objc:NSWindow.isMiniaturized"
+-- private foreign handler NSWindowIsMiniaturized(in aNSWindow as ObjcId, in pKeyForValue as ObjcId) returns cBool binds to "objc:NSWindow.-valueforKey:"
 private foreign handler NSApplicationHide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-hide:"
 private foreign handler NSApplicationUnhide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-unhide:"
 
@@ -242,15 +244,6 @@ public handler ToggleFullScreen(in windowID as Integer) returns nothing
 	end if
 end handler
 
-public handler PerformMiniaturize(in windowID as Integer) returns nothing
-	if (the operating system is "mac") then
-		variable aNSWindow as ObjcId
-		unsafe
-			put _NSWindowFromWindowID(windowID) into aNSWindow
-			NSWindowPerformMiniaturize(aNSWindow, nothing)
-		end unsafe
-	end if
-end handler
 --------------------------------------------------------------------------------
 /**
 Creates macOS notification center notes
@@ -322,10 +315,41 @@ This is the programatic equivelant to option-clicking the yellow minimize button
 public handler MiniaturizeAll() returns nothing
 	if (the operating system is "mac") then
 			variable sharedApplication as ObjcId
-			variable tResults as CLong
+			-- variable tResults as CLong
 		unsafe
 			put NSApplicationSharedApplication() into sharedApplication
-			put NSApplicationMiniaturizeAll(sharedApplication,nothing) into tResults
+			NSApplicationMiniaturizeAll(sharedApplication,nothing)
+		end unsafe
+	end if
+end handler
+
+public handler PerformMiniaturize(in windowID as Integer) returns nothing
+	if (the operating system is "mac") then
+		variable aNSWindow as ObjcId
+		unsafe
+			put _NSWindowFromWindowID(windowID) into aNSWindow
+			NSWindowPerformMiniaturize(aNSWindow, nothing)
+		end unsafe
+	end if
+end handler
+public handler Deminiaturize(in windowID as Integer) returns nothing
+	if (the operating system is "mac") then
+		variable aNSWindow as ObjcId
+		unsafe
+			put _NSWindowFromWindowID(windowID) into aNSWindow
+			NSWindowDeminiaturize(aNSWindow, aNSWindow)
+		end unsafe
+	end if
+end handler
+
+public handler IsMiniaturized(in windowID as Integer) returns Boolean
+	if (the operating system is "mac") then
+		variable aNSWindow as ObjcId
+		-- variable rIsMiniaturized as Boolean -- A Boolean value that indicates whether the window is minimized.
+		unsafe
+			put _NSWindowFromWindowID(windowID) into aNSWindow
+			-- return NSWindowIsMiniaturized(aNSWindow, StringToNSString("IsMiniaturized"))
+		  return NSWindowIsMiniaturized(aNSWindow)
 		end unsafe
 	end if
 end handler
