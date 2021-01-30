@@ -421,7 +421,7 @@ Returns: Requested return type or a return delimited list
 public handler GetFrontmostApplication(in pReturnType as optional String) returns any
 	variable sharedWorkspace as ObjcObject
 	variable tFrontmostApp as optional ObjcObject
-	variable tReturnVal as optional ObjcObject
+	variable tBundleId as optional ObjcObject
 	variable tNSUrl as optional ObjcObject
 	variable tNSPath as optional ObjcObject
 	variable tPID as optional any
@@ -433,24 +433,24 @@ public handler GetFrontmostApplication(in pReturnType as optional String) return
    		if pReturnType is "ProcessID" then
    			return ObjC_NSRunningApplicationProcessIdentifier(tFrontmostApp)
       	else if pReturnType is "Path" then
-      		put ObjC_NSRunningApplicationBundleIdentifier(tFrontmostApp) into tReturnVal
-      		if tReturnVal is not nothing then
-      			 put ObjC_NSWorkspaceURLForAppBundleID(sharedWorkspace,tReturnVal) into tNSUrl
+      		put ObjC_NSRunningApplicationBundleIdentifier(tFrontmostApp) into tBundleId
+      		if tBundleId is not nothing then
+      			 put ObjC_NSWorkspaceURLForAppBundleID(sharedWorkspace,tBundleId) into tNSUrl
       			 put objC_NSURLGetPath(tNSUrl) into tNSPath
       		 	 return StringFromNSString(tNSPath)
       	  end if
       	else if pReturnType is "BundleID" then
-      		put ObjC_NSRunningApplicationBundleIdentifier(tFrontmostApp) into tReturnVal
-      		 if tReturnVal is not nothing then
-      		   return StringFromNSString(tReturnVal)
+      		put ObjC_NSRunningApplicationBundleIdentifier(tFrontmostApp) into tBundleId
+      		 if tBundleId is not nothing then
+      		   return StringFromNSString(tBundleId)
       		 end if
       	else
       		put ObjC_NSRunningApplicationProcessIdentifier(tFrontmostApp) into tPID
-      		put ObjC_NSRunningApplicationBundleIdentifier(tFrontmostApp) into tReturnVal
-      		if tReturnVal is not nothing then
-      		  put ObjC_NSWorkspaceURLForAppBundleID(sharedWorkspace,tReturnVal) into tNSUrl
+      		put ObjC_NSRunningApplicationBundleIdentifier(tFrontmostApp) into tBundleId
+      		if tBundleId is not nothing then
+      		  put ObjC_NSWorkspaceURLForAppBundleID(sharedWorkspace,tBundleId) into tNSUrl
       		  put objC_NSURLGetPath(tNSUrl) into tNSPath
-      		  return StringFromNSString(tReturnVal) & "\n" & tPID formatted as string & "\n" & StringFromNSString(tNSPath)
+      		  return tPID formatted as string & "," & StringFromNSString(tBundleId) & "," & StringFromNSString(tNSPath)
       		end if
       	 end if
       end if
@@ -458,30 +458,45 @@ public handler GetFrontmostApplication(in pReturnType as optional String) return
 end handler
 
 public handler GetRunningApplications() returns String
-  variable workSpace as ObjcObject
-  variable tRunningAppsObjc as optional ObjcObject
-  variable tRunningApps as List
-  variable tRunningApp as ObjcObject
-  variable tBundleId as optional ObjcObject
-  variable rReturnStrList as String
-  unsafe
-	 put ObjC_NSWorkspaceSharedWorkspace() into workSpace
-	 put ObjC_NSWorkspaceRunningApplications(workSpace) into tRunningAppsObjc
-  end unsafe
-  put the empty string into rReturnStrList
-  if tRunningAppsObjc is not nothing then
-	 put ListFromNSArray(tRunningAppsObjc) into tRunningApps
-	 repeat for each element tRunningApp in tRunningApps
-		unsafe
-		  put ObjC_NSRunningApplicationBundleIdentifier(tRunningApp) into tBundleId
-		end unsafe
-		if tBundleId is not nothing then
-		  put StringFromNSString(tBundleId) & "\n" after rReturnStrList
-		end if
-	 end repeat
-  end if
-  return rReturnStrList
-end handler
+   variable tWorkSpace as ObjcObject
+   variable tRunningAppsObjc as optional ObjcObject
+   variable tRunningApps as List
+   variable tRunningApp as ObjcObject
+   variable tBundleId as optional ObjcObject
+   variable tPID as optional any
+   variable tNSUrl as optional ObjcId
+   variable tPath as optional ObjcObject
+   variable rReturnStrList as String
+   variable tTempStr as String
 
+   unsafe
+      put ObjC_NSWorkspaceSharedWorkspace() into tWorkSpace
+      put ObjC_NSWorkspaceRunningApplications(tWorkSpace) into tRunningAppsObjc
+      if tRunningAppsObjc is not nothing then
+         put the empty string into rReturnStrList
+         put ListFromNSArray(tRunningAppsObjc) into tRunningApps
+            repeat for each element tRunningApp in tRunningApps
+               put ObjC_NSRunningApplicationProcessIdentifier(tRunningApp) into tPID
+               put ObjC_NSRunningApplicationBundleIdentifier(tRunningApp) into tBundleId
+               if tBundleId is not nothing then
+                  put ObjC_NSWorkspaceURLForAppBundleID(tWorkSpace,tBundleId) into tNSUrl
+                  if tNSUrl is not nothing then
+                     put objC_NSURLGetPath(tNSUrl) into tPath
+                     put "," & StringFromNSString(tPath) into tTempStr
+                  else
+                     put "" into tTempStr
+                  end if
+                  put tPID formatted as string & "," & StringFromNSString(tBundleId) & tTempStr & "\n" after rReturnStrList
+               end if
+               put nothing into tBundleId
+               put nothing into tPID
+               put nothing into tNSUrl
+               put nothing into tPath
+               put "" into tTempStr
+            end repeat
+         return rReturnStrList
+      end if
+   end unsafe
+end handler
 
 end library
