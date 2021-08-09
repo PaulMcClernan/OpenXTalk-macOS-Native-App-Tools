@@ -2,7 +2,7 @@
   <name>community.livecode.paulmcclernan.macostools</name>
   <title>Paul&apos;s macOS Tools</title>
   <author>Paul McClernan</author>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <license>community</license>
   <type>library</type>
   <requires name="com.livecode.objc"/>
