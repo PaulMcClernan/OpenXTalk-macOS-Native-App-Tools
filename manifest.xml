@@ -13,6 +13,7 @@
   <requires name="com.livecode.logic"/>
   <requires name="com.livecode.string"/>
   <requires name="com.livecode.type"/>
+  <requires name="com.livecode.engine"/>
   <requires name="com.livecode.system"/>
   <requires name="com.livecode.bitwise"/>
   <requires name="com.livecode.array"/>
@@ -23,6 +24,8 @@
   <handler name="FullScreenAllowed" parameters="in integer,in boolean" return="nothing"/>
   <handler name="IsFullScreenAllowed" parameters="in integer" return="boolean"/>
   <handler name="ToggleFullScreen" parameters="in integer" return="nothing"/>
+  <handler name="setWindowToDarkMode" parameters="in integer" return="nothing"/>
+  <handler name="setWindowToLightMode" parameters="in integer" return="nothing"/>
   <handler name="PostUserNotification" parameters="in string,in optional string,in optional string,in optional string,in optional string" return="nothing"/>
   <handler name="MiniaturizeAll" parameters="" return="nothing"/>
   <handler name="PerformMiniaturize" parameters="in integer" return="nothing"/>

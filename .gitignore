@@ -9,3 +9,21 @@ manifest.xml
 module.2.lcm
 community.livecode.paulmcclernan.macostools.lci
 module.2.lcm
+._macOStools.lcb
+._Test2.livecode
+community.livecode.paulmcclernan.macostools.lci
+darkMode tests/._DarkModeTests.livecode
+community.livecode.paulmcclernan.macostools.lci
+module.2.lcm
+old versions/._old-macOStools.lcb
+old versions/._Test old.livecode
+Research/._applicationDockMenu- | Apple Developer Documentation.webloc
+Research/._contentView | Apple Developer Documentation.webloc
+Research/._Learn Objective-C in 24 Days | Programming for iOS.webloc
+Research/._MacPDFView_widget.lcb~
+Research/._NSMediaLibraryBrowserController | Apple Developer Documentation.webloc
+Research/._NSPageController | Apple Developer Documentation.webloc
+Research/._NSPanel | Apple Developer Documentation.webloc
+Research/._NSSound | Apple Developer Documentation.webloc
+Research/._NSSpeechRecognizer | Apple Developer Documentation 2.webloc
+Research/._NSSpeechRecognizer | Apple Developer Documentation.webloc
