@@ -12,3 +12,5 @@ and behave as normal native mac apps could (or should).
 Feel free to modify, branch, or include any part of it in your
 own LiveCode Builder projects, all I ask is that if you do so
 you publish your source .lcb so others can learn from it.
+
+https://www.buymeacoffee.com/PaulMcClernan
