@@ -15,19 +15,26 @@ version: 1.0.1
 author: Paul McClernan
 
 
-Name: AppUnhide
+Name: FullScreenAllowed
 
 Type: handler
 
-Syntax: AppUnhide()
+Syntax: FullScreenAllowed(<windowID>,<isAllowed>)
 
-Summary: Unhides the app revealing any document windows that were hidden.
+Summary: Sets the mac native fullscreen attribute for a windowID passed to it.
 
-Example: AppUnhide
+Example: FullScreenAllowed the windowID of this stack, TRUE
+
+Parameters: 
+
+windowID: retrieved from a stack's windowID property.
+
+isAllowed: If true then allow, if false don't allow.
 
 Description:
-Unhides the app revealing any document windows that were hidden, but it does not
-activate the app which remains in the background.
+This handler will set the mac native Full Screen behaviour on the windowID passed.
+Depending on the OS version, this will either display an icon in the window’s
+top-right corner, or change the maximize button to display double arrows.
 
 
 
@@ -70,42 +77,108 @@ state of the stack.
 
 
 
-Name: MiniaturizeAll
+Name: PostUserNotification
 
 Type: handler
 
-Syntax: MiniaturizeAll()
+Syntax: PostUserNotification(<postTitle>,<subTitle>,<informativeText>,<postIdentifier>,<soundName>)
 
-Summary: Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
+Summary: Creates macOS notification center notes
 
-Example: MiniaturizeAll
+Example: PostUserNotification "Download Completed", "freelibs.net", "Your download of macOS.lce is completed", "DLNote001", "sosumi"
+
+Parameters: 
+
+postTitle: title of the notification
+
+subTitle: subtitle of the notification
+
+informativeText: The body text of the notification
+
+postIdentifier: identifier for a notification, usefull for overwriting
+
+soundName:
+name of a sound in the system
+pass empty for no sound, pass "default" for default "ding" sound
 
 Description:
-Minimize all document windows (does not effect on modal dialogs or modeless palette windows).
-This is the programatic equivelant to option-clicking the yellow minimize button on the windowframe
+Creates macOS notification center notes.
+String values should be localized as it is presented to the user.
+String values for postTitle and subTitle truncated to a length appropriate for
+display and it's properties modified to reflect any truncations.
+For soundName Pass empty for silent or pass any sound file in any of the OS
+Library/Audio/Sounds folders, if no match is found a default alert sound is used.
 
 
 
-Name: FullScreenAllowed
+Name: AppHide
 
 Type: handler
 
-Syntax: FullScreenAllowed(<windowID>,<isAllowed>)
+Syntax: AppHide()
 
-Summary: Sets the mac native fullscreen attribute for a windowID passed to it.
+Summary: Hides the app sending it in the background and activates the next active app.
 
-Example: FullScreenAllowed the windowID of this stack, TRUE
+Example: AppHide
+
+Description:
+Hides the app, sending it in the background and activates the next active app.
+This is the programatic equivelant to selcting Hide from the app's Dock menu.
+
+
+
+Name: AppUnhide
+
+Type: handler
+
+Syntax: AppUnhide()
+
+Summary: Unhides the app revealing any document windows that were hidden.
+
+Example: AppUnhide
+
+Description:
+Unhides the app revealing any document windows that were hidden, but it does not
+activate the app which remains in the background.
+
+
+
+Name: setWindowToLightMode
+
+Type: handler
+
+Syntax: setWindowToLightMode(<pWindowID>)
+
+Summary: Assign the macOS native "light mode" window style to a stack's window
+
+Example: setWindowToLightMode the windowID of this stack
 
 Parameters: 
 
 windowID: retrieved from a stack's windowID property.
 
-isAllowed: If true then allow, if false don't allow.
+Description: This handler will set the macOS "light" appearance of the window passed.
+
+
+
+
+Name: SetDockTileBadge
+
+Type: handler
+
+Syntax: SetDockTileBadge(<badgeText>)
+
+Summary: Badge the App's Dock Icon with a small string of text.
+
+Example: setDockTileBadge "Hello"
+
+Parameters: 
+
+badgeText: a small string of text to badge the app's dock icon with.
 
 Description:
-This handler will set the mac native Full Screen behaviour on the windowID passed.
-Depending on the OS version, this will either display an icon in the window’s
-top-right corner, or change the maximize button to display double arrows.
+Badge the App's Dock Icon with a small string of text. If badgeText string is
+too long it will be automatically truncated to fit.
 
 
 
@@ -141,37 +214,22 @@ the app is the active foreground app.
 
 
 
-Name: PostUserNotification
+Name: setWindowToDarkMode
 
 Type: handler
 
-Syntax: PostUserNotification(<postTitle>,<subTitle>,<informativeText>,<postIdentifier>,<soundName>)
+Syntax: setWindowToDarkMode(<pWindowID>)
 
-Summary: Creates macOS notification center notes
+Summary: Assign the macOS native "dark mode" window style to a stack's window
 
-Example: PostUserNotification "Download Completed", "freelibs.net", "Your download of macOS.lce is completed", "DLNote001", "sosumi"
+Example: setWindowToDarkMode the windowID of this stack
 
 Parameters: 
 
-postTitle: title of the notification
+windowID: retrieved from a stack's windowID property.
 
-subTitle: subtitle of the notification
+Description: This handler will set the macOS dark appearance of the window passed.
 
-informativeText: The body text of the notification
-
-postIdentifier: identifier for a notification, usefull for overwriting
-
-soundName:
-name of a sound in the system
-pass empty for no sound, pass "default" for default "ding" sound
-
-Description:
-Creates macOS notification center notes.
-String values should be localized as it is presented to the user.
-String values for postTitle and subTitle truncated to a length appropriate for
-display and it's properties modified to reflect any truncations.
-For soundName Pass empty for silent or pass any sound file in any of the OS
-Library/Audio/Sounds folders, if no match is found a default alert sound is used.
 
 
 
@@ -195,39 +253,19 @@ The FullScreenAllowed must first be enabled for this to work (system requirement
 
 
 
-Name: AppHide
+Name: MiniaturizeAll
 
 Type: handler
 
-Syntax: AppHide()
+Syntax: MiniaturizeAll()
 
-Summary: Hides the app sending it in the background and activates the next active app.
+Summary: Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
 
-Example: AppHide
-
-Description:
-Hides the app, sending it in the background and activates the next active app.
-This is the programatic equivelant to selcting Hide from the app's Dock menu.
-
-
-
-Name: SetDockTileBadge
-
-Type: handler
-
-Syntax: SetDockTileBadge(<badgeText>)
-
-Summary: Badge the App's Dock Icon with a small string of text.
-
-Example: setDockTileBadge "Hello"
-
-Parameters: 
-
-badgeText: a small string of text to badge the app's dock icon with.
+Example: MiniaturizeAll
 
 Description:
-Badge the App's Dock Icon with a small string of text. If badgeText string is
-too long it will be automatically truncated to fit.
+Minimize all document windows (does not effect on modal dialogs or modeless palette windows).
+This is the programatic equivelant to option-clicking the yellow minimize button on the windowframe
 
 
 

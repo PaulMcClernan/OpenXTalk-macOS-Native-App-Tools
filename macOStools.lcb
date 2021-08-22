@@ -387,18 +387,18 @@ public handler setWindowToDarkMode(in pWindowID as Integer) returns nothing
          -- LogNSObjectClassName(tNSAppearance)
          ObjC_NSWindowSetAppearance(tNSWindow,mNSAppearance)
          -- Borderless = 0
-         -- Titled = 1
-         -- Closable = 2
-         -- Miniaturizable = 4
-         -- Resizable = 8
+         -- Titled = 1 LCS 'Decoration' = "title"
+         -- Closable = 2 LCS 'Decoration' = "close"
+         -- Miniaturizable = 4 LCS 'Decoration' =" minimize"
+         -- Resizable = 8 -- LCS equivelant is stack "resizable" property
          -- Utility = 16
          -- DocModal = 64
          -- NonactivatingPanel = 128
-         -- TexturedBackground = 256 (deprecated as of 10.10)
+         -- TexturedBackground = 256 (deprecated as of macOS 10.10)
          -- Unscaled = 2048
          -- UnifiedTitleAndToolbar = 4096
          -- Hud = 8192
-         -- CanFullScreenWindow = 16384
+         -- CanFullScreenWindow = 16384 LCS 'maximize' ="
          -- FullSizeContentView = 32768
          -- ObjC_NSWindowSetStyleMask(tNSWindow, 1+2+4+8+4096+32768)
          ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("titlebarAppearsTransparent"))
