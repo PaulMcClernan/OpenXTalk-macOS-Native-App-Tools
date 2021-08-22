@@ -97,6 +97,7 @@ private foreign handler ObjC_NSWindowDealloc(in pNSViewController as ObjcId) ret
 private foreign handler ObjC_NSWindowSetContentView(in pNSWindow as ObjcId, in pNSView as ObjcId) returns nothing binds to "objc:NSWindow.-setContentView:"
 private foreign handler ObjC_NSWindowSetValueForKey( in pNSWindow as ObjcId, in pValue as ObjcRetainedId, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
 private foreign handler ObjC_NSWindowSetTitle(in pNSWindow as ObjcId, in pTitleNSStr as ObjcId) returns nothing binds to "objc:NSWindow.-setTitle:"
+private foreign handler ObjC_NSWindowSetTitleVisibility(in pNSWindow as ObjcId, in pVisibleUnum as ObjcId) returns nothing binds to "objc:NSWindow.-setTitleVisibility:"
 private foreign handler ObjC_NSWindowSetAppearance(in pNSWindow as ObjcId, in pAppearanceNameNSStr as ObjcId) returns nothing binds to "objc:NSWindow.-setAppearance:"
 private foreign handler ObjC_NSWindowPerformMiniaturize(in pNSWindow as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSWindow.-performMiniaturize:" -- (void)performMiniaturize:(id)sender;
 private foreign handler ObjC_NSWindowDeminiaturize(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-deminiaturize:"
@@ -112,6 +113,8 @@ private foreign handler ObjC_NSWindowToggleFullScreen(in pNSWindow as optional O
 private foreign handler ObjC_NSWindowSetContentViewController(in pNSWindow as ObjcId, in pViewController as ObjcId) returns nothing binds to "objc:NSWindow.-setContentView:"
 private foreign handler ObjC_NSWindowGetContentViewController(in pOpNSWindowbj as ObjcId) returns ObjcId binds to "objc:NSWindow.-contentViewController"
 private foreign handler ObjC_NSWindowGetWindowController(in pNSWindow as ObjcId) returns ObjcId binds to "objc:NSWindow.-windowController"
+private foreign handler ObjC_NSWindowSetBoolValueForKey( in pNSWindow as ObjcId, in pValue as CBool, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
+
 
 private foreign handler ObjC_NSWindowControllerAlloc() returns ObjcRetainedId binds to "objc:NSWindowController.+alloc"
 private foreign handler ObjC_NSWindowControllerDealloc(in pNSWindowController as ObjcId) returns nothing binds to "objc:NSWindowController.-dealloc"
@@ -383,6 +386,23 @@ public handler setWindowToDarkMode(in pWindowID as Integer) returns nothing
 
          -- LogNSObjectClassName(tNSAppearance)
          ObjC_NSWindowSetAppearance(tNSWindow,mNSAppearance)
+         -- Borderless = 0
+         -- Titled = 1
+         -- Closable = 2
+         -- Miniaturizable = 4
+         -- Resizable = 8
+         -- Utility = 16
+         -- DocModal = 64
+         -- NonactivatingPanel = 128
+         -- TexturedBackground = 256 (deprecated as of 10.10)
+         -- Unscaled = 2048
+         -- UnifiedTitleAndToolbar = 4096
+         -- Hud = 8192
+         -- CanFullScreenWindow = 16384
+         -- FullSizeContentView = 32768
+         -- ObjC_NSWindowSetStyleMask(tNSWindow, 1+2+4+8+4096+32768)
+         ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("titlebarAppearsTransparent"))
+         --ObjC_NSWindowSetTitleVisibility(tNSWindow,NumberToNSNumber(1)) --- 1 = TitleBar hidden, 0 = TitleBar Visible
          -- window?.appearance
 		end unsafe
 	end if
