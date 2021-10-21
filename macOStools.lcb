@@ -1,5 +1,5 @@
 /**
-This Library is a collection of macOS Cocoa AppKit related LCB FFI wrappers.
+This Library is a collection of macOS Cocoa and AppKit related FFI wrappers.
 
 Description:
 A collection of macOS Cocoa AppKit related handlers
@@ -8,7 +8,7 @@ A collection of macOS Cocoa AppKit related handlers
 > Please share and share a like.
 */
 
-library community.livecode.paulmcclernan.macostools
+library org.oxt.paulmcclernan.macosnativeapptools
 
 use com.livecode.foreign
 use com.livecode.objc
