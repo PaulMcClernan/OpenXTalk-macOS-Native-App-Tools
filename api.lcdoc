@@ -1,8 +1,8 @@
-Library: community.livecode.paulmcclernan.macostools
+Library: org.oxt.paulmcclernan.macosnativeapptools
 
 Type: library
 
-Summary: This Library is a collection of macOS Cocoa AppKit related LCB FFI wrappers.
+Summary: This Library is a collection of macOS Cocoa and AppKit related FFI wrappers.
 
 Description:
 A collection of macOS Cocoa AppKit related handlers

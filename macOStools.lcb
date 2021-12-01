@@ -432,8 +432,18 @@ public handler setWindowToLightMode(in pWindowID as Integer) returns nothing
 	end if
 end handler
 
----- I'm just going to leave these next handlers as undocumented because the LC IDE user interface is not yet setup to handle "dark mode" ----------------------
-public handler setLCToDarkMode() returns nothing
+------------------------ For All App NSWindows ------------------------
+
+/**
+Assign the macOS App's native "DarkMode mode" window style to all window
+
+Example:
+setAllToDarkMode the windowID of this stack
+
+Description:
+This sets an Apps appearance to DarkMode, with all app windows inheriting the dark appearance
+*/
+public handler setAllToDarkMode() returns nothing
 	if (the operating system is "mac") then
       variable tSharedApplication as ObjcId
       -- variable tResults as CLong
@@ -445,7 +455,7 @@ public handler setLCToDarkMode() returns nothing
 		end unsafe
 	end if
 end handler
-public handler setLCToLightMode() returns nothing
+public handler setAllToLightMode() returns nothing
 	if (the operating system is "mac") then
       variable tSharedApplication as ObjcId
 		unsafe
