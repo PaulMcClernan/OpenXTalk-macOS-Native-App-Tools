@@ -233,6 +233,37 @@ Description: This handler will set the macOS dark appearance of the window passe
 
 
 
+Name: setAllToDarkMode
+
+Type: handler
+
+Syntax: setAllToDarkMode()
+
+Summary: Assign the macOS App's native "DarkMode mode" window style to all window
+
+Example: setAllToDarkMode the windowID of this stack
+
+Description: This sets an Apps appearance to DarkMode, with all app windows inheriting the dark appearance
+
+
+
+
+Name: MiniaturizeAll
+
+Type: handler
+
+Syntax: MiniaturizeAll()
+
+Summary: Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
+
+Example: MiniaturizeAll
+
+Description:
+Minimize all document windows (does not effect on modal dialogs or modeless palette windows).
+This is the programatic equivelant to option-clicking the yellow minimize button on the windowframe
+
+
+
 Name: ToggleFullScreen
 
 Type: handler
@@ -250,22 +281,6 @@ windowID: retrieved from a stack's windowID property.
 Description:
 This handler will toggle the Full Screen state of the window passed.
 The FullScreenAllowed must first be enabled for this to work (system requirement)
-
-
-
-Name: MiniaturizeAll
-
-Type: handler
-
-Syntax: MiniaturizeAll()
-
-Summary: Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
-
-Example: MiniaturizeAll
-
-Description:
-Minimize all document windows (does not effect on modal dialogs or modeless palette windows).
-This is the programatic equivelant to option-clicking the yellow minimize button on the windowframe
 
 
 
