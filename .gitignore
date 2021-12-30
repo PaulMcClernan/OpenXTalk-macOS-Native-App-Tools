@@ -37,3 +37,6 @@ manifest.xml
 .github/FUNDING.yml
 api.lcdoc
 manifest.xml
+guide/._images
+guide/._guide.md
+._guide
