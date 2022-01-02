@@ -8,7 +8,7 @@ A collection of macOS Cocoa AppKit related handlers
 > Please share and share a like.
 */
 
-library org.oxt.paulmcclernan.macosnativeapptools
+library org.openxtalk.library.macosnativeapptools
 
 use com.livecode.foreign
 use com.livecode.objc
