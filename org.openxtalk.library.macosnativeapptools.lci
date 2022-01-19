@@ -23,8 +23,8 @@ import module org.openxtalk.library.macosnativeapptools
   handler ToggleFullScreen(in windowID as Number) returns nothing
   handler setWindowToDarkMode(in windowID as Number) returns nothing
   handler setWindowToLightMode(in windowID as Number) returns nothing
-  handler setAllToDarkMode() returns nothing
-  handler setAllToLightMode() returns nothing
+  handler setAppToDarkMode() returns nothing
+  handler setAppToLightMode() returns nothing
   handler PostUserNotification(in postTitle as String, in subTitle as optional String, in informativeText as optional String, in postIdentifier as optional String, in soundName as optional String) returns nothing
   handler MiniaturizeAll() returns nothing
   handler PerformMiniaturize(in windowID as Number) returns nothing

@@ -28,8 +28,8 @@
   <handler name="ToggleFullScreen" parameters="in integer" return="nothing"/>
   <handler name="setWindowToDarkMode" parameters="in integer" return="nothing"/>
   <handler name="setWindowToLightMode" parameters="in integer" return="nothing"/>
-  <handler name="setAllToDarkMode" parameters="" return="nothing"/>
-  <handler name="setAllToLightMode" parameters="" return="nothing"/>
+  <handler name="setAppToDarkMode" parameters="" return="nothing"/>
+  <handler name="setAppToLightMode" parameters="" return="nothing"/>
   <handler name="PostUserNotification" parameters="in string,in optional string,in optional string,in optional string,in optional string" return="nothing"/>
   <handler name="MiniaturizeAll" parameters="" return="nothing"/>
   <handler name="PerformMiniaturize" parameters="in integer" return="nothing"/>

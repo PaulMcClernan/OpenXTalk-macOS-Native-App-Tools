@@ -401,8 +401,8 @@ public handler setWindowToDarkMode(in pWindowID as Integer) returns nothing
          -- UnifiedTitleAndToolbar = 4096
          -- Hud = 8192
          -- CanFullScreenWindow = 16384 LCS 'maximize' ="
-         -- FullSizeContentView = 32768
-         -- ObjC_NSWindowSetStyleMask(tNSWindow, 1+2+4+8+4096+32768)
+         -- FullSizeContentView = 32768 --
+         -- ObjC_NSWindowSetStyleMask(tNSWindow,11 + 4096 + 256 + 32768)
          ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("titlebarAppearsTransparent"))
          --ObjC_NSWindowSetTitleVisibility(tNSWindow,NumberToNSNumber(1)) --- 1 = TitleBar hidden, 0 = TitleBar Visible
          -- window?.appearance
@@ -433,19 +433,17 @@ public handler setWindowToLightMode(in pWindowID as Integer) returns nothing
 		end unsafe
 	end if
 end handler
-
 ------------------------ For All App NSWindows ------------------------
-
 /**
-Assign the macOS App's native "DarkMode mode" window style to all window
+Assign the macOS native "Vibrant Dark" appearance style to all app windows
 
 Example:
-setAllToDarkMode the windowID of this stack
+setAppToDarkMode the windowID of this stack
 
 Description:
-This sets an Apps appearance to DarkMode, with all app windows inheriting the dark appearance
+This sets an Apps appearance to Dark Mode, with all app windows inheriting the dark appearance
 */
-public handler setAllToDarkMode() returns nothing
+public handler setAppToDarkMode() returns nothing
 	if (the operating system is "mac") then
       variable tSharedApplication as ObjcId
       -- variable tResults as CLong
@@ -457,7 +455,17 @@ public handler setAllToDarkMode() returns nothing
 		end unsafe
 	end if
 end handler
-public handler setAllToLightMode() returns nothing
+
+/**
+Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
+
+Example:
+setAppToDarkMode the windowID of this stack
+
+Description:
+This sets an Apps appearance to Light Mode, with all app windows inheriting the dark appearance
+*/
+public handler setAppToLightMode() returns nothing
 	if (the operating system is "mac") then
       variable tSharedApplication as ObjcId
 		unsafe
