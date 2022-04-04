@@ -14,9 +14,12 @@ own Builder projects. If you do so you must publish your source .lcb
 in accordance to GPLv3 license so that others can learn from it.
 
 Hander List:
-- AppHide -	Hides the app sending it in the background and activates the next active app.	AppHide()
-- AppUnhide	Unhides the app revealing any document windows that were hidden.	AppUnhide()
-- FullScreenAllowed	Sets the mac native fullscreen attribute for a windowID passed to it.	FullScreenAllowed(windowID,isAllowed)
+- AppHide -	Hides the app sending it in the background and activates the next active app.	
+  AppHide()
+- AppUnhide	Unhides the app revealing any document windows that were hidden.	
+  AppUnhide()
+- FullScreenAllowed	Sets the mac native fullscreen attribute for a windowID passed to it.	
+  FullScreenAllowed(windowID,isAllowed)
 - GetFrontmostApplication	Returns information about the frontmost application.	GetFrontmostApplication(pReturnType)
 - IsFullScreenAllowed	Returns the mac native Full Screen behavior state of stack's window.	IsFullScreenAllowed(windowID)
 - MiniaturizeAll	Minimize all document windows (does not effect on modal dialogs or modeless palette windows)	MiniaturizeAll()
