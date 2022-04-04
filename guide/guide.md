@@ -15,16 +15,16 @@ in accordance to GPLv3 license so that others can learn from it.
 
 Handler List:
 - AppHide -	Hides the app sending it in the background and activates the next active app.	
-- AppUnhide	Unhides the app revealing any document windows that were hidden.	
-- FullScreenAllowed	Sets the mac native fullscreen attribute for a windowID passed to it.	
-- GetFrontmostApplication	Returns information about the frontmost application.
-- IsFullScreenAllowed	Returns the mac native Full Screen behavior state of stack's window.
-- MiniaturizeAll	Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
-- PostUserNotification	Creates macOS notification center notes
-- RequestUserAttention	When the app is in the background, RequestUserAttention calls for user attention by bouncy the App's icon in the Dock
-- setAppToDarkMode	Assign the macOS native "Vibrant Dark" appearance style to all app windows
-- setAppToLightMode	Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
-- SetDockTileBadge	Badge the App's Dock Icon with a small string of text.
-- setWindowToDarkMode	Assign the macOS native "dark mode" window style to a stack's window
-- setWindowToLightMode	Assign the macOS native "light mode" window style to a stack's window
-- ToggleFullScreen	Toggle the mac native Full Screen state of a stack's window
+- AppUnhide -	Unhides the app revealing any document windows that were hidden.	
+- FullScreenAllowed	- Sets the mac native fullscreen attribute for a windowID passed to it.	
+- GetFrontmostApplication	- Returns information about the frontmost application.
+- IsFullScreenAllowed -	Returns the mac native Full Screen behavior state of stack's window.
+- MiniaturizeAll - Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
+- PostUserNotification - Creates macOS notification center notes
+- RequestUserAttention - When the app is in the background, RequestUserAttention calls for user attention by bouncy the App's icon in the Dock
+- setAppToDarkMode - Assign the macOS native "Vibrant Dark" appearance style to all app windows
+- setAppToLightMode - Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
+- SetDockTileBadge - Badge the App's Dock Icon with a small string of text.
+- setWindowToDarkMode - Assign the macOS native "dark mode" window style to a stack's window
+- setWindowToLightMode - Assign the macOS native "light mode" window style to a stack's window
+- ToggleFullScreen - Toggle the mac native Full Screen state of a stack's window
