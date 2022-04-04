@@ -21,7 +21,7 @@ Handler List:
 - IsFullScreenAllowed -	Returns the mac native Full Screen behavior state of stack's window.
 - MiniaturizeAll - Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
 - PostUserNotification - Creates macOS notification center notes
-- RequestUserAttention - When the app is in the background, RequestUserAttention calls for user attention by bouncy the App's icon in the Dock
+- RequestUserAttention - When the app is in the background, this calls for the users attention by "bouncing" the App's icon in the Dock
 - setAppToDarkMode - Assign the macOS native "Vibrant Dark" appearance style to all app windows
 - setAppToLightMode - Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
 - SetDockTileBadge - Badge the App's Dock Icon with a small string of text.
