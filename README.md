@@ -11,6 +11,6 @@ normal native mac apps could (or should).
 
 Feel free to modify, branch, or include any part of it in your
 own Builder projects. If you do so you must publish your source .lcb
-in accordance to GPL3 so others can learn from it.
+in accordance to GPLv3 license so that others can learn from it.
 
 https://www.buymeacoffee.com/PaulMcClernan
