@@ -1,6 +1,6 @@
 # OpenXTalk macOS Native App Tools
 
-This is a OpenXTalk Builder library extension that uses the
+This is an Extension Builder library that uses the
 Foreign Function Interface (FFI) to wrap some of the features
 of Apple Cocoa API's AppKit, thereby making them accessible to 
 xTalk Scripts.
