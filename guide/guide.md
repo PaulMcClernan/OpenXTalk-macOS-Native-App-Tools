@@ -13,7 +13,7 @@ Feel free to modify, branch, or include any part of it in your
 own Builder projects. If you do so you must publish your source .lcb
 in accordance to GPLv3 license so that others can learn from it.
 
-Hander List:
+Handler List:
 - AppHide -	Hides the app sending it in the background and activates the next active app.	
 - AppUnhide	Unhides the app revealing any document windows that were hidden.	
 - FullScreenAllowed	Sets the mac native fullscreen attribute for a windowID passed to it.	
