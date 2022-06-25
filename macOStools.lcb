@@ -720,6 +720,11 @@ public handler GetFrontmostApplication(in pReturnType as optional String) return
 	end unsafe
 end handler
 
+/**
+Summary: Returns a information about running applications as a line demilited list.
+Returns: Returns a line delimited list of information about the currently
+running applications as a line demilited list.
+*/
 public handler GetRunningApplications() returns String
    variable tWorkSpace as ObjcObject
    variable tRunningAppsObjc as optional ObjcObject
