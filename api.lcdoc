@@ -10,7 +10,7 @@ A collection of macOS Cocoa AppKit related handlers
 >*Note:* This library is MIT licensed (permissive).
 > Please share and share a like.
 
-version: 1.0.1
+version: 1.0.2
 
 author: Paul McClernan
 
@@ -296,6 +296,19 @@ Example: MiniaturizeAll
 Description:
 Minimize all document windows (does not effect on modal dialogs or modeless palette windows).
 This is the programatic equivelant to option-clicking the yellow minimize button on the windowframe
+
+
+
+Name: GetrCurrentUserHomeURL
+
+Type: handler
+
+Syntax: GetrCurrentUserHomeURL()
+
+Summary: Returns the users home directory.
+
+Returns: Users home directory
+
 
 
 

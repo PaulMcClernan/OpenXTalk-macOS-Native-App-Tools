@@ -13,7 +13,7 @@ library org.openxtalk.library.macosnativeapptools
 use com.livecode.foreign
 use com.livecode.objc
 
-metadata version is "1.0.1"
+metadata version is "1.0.2"
 metadata author is "Paul McClernan"
 metadata title is "Openxtalk.org macOS Native Tools"
 metadata _ide is "true" -- ? default load at startup
@@ -55,6 +55,11 @@ private foreign handler NSDistributedNotificationCenterPostNotificationNameObjec
 private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
 --private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
 
+
+private foreign handler NSFileManagerSharedManager() returns ObjcId binds to "objc:NSFileManager.+defaultManager"
+private foreign handler NSFileManagerCurrentUserHomeURL(in pNSSharedFilemanager as ObjcId) returns ObjcId binds to "objc:NSFileManager.homeDirectoryForCurrentUser"
+
+
 private foreign handler ObjC_NSWorkspaceSharedWorkspace() returns ObjcId binds to "objc:NSWorkspace.+sharedWorkspace"
 private foreign handler ObjC_NSWorkspaceSelectFile(in pSharedWorkspace as ObjcId, in pFilename as ObjcId, in pRootedAtPath as ObjcId) returns CBool binds to "objc:NSWorkspace.-selectFile:inFileViewerRootedAtPath:"
 private foreign handler ObjC_NSWorkspaceIsFilePackageAtPath(in pSharedWorkspace as ObjcId, in pFilename as ObjcId) returns CBool binds to "objc:NSWorkspace.-isFilePackageAtPath:"
@@ -71,6 +76,7 @@ private foreign handler objC_NSURLfileOrDirURLWithPath(in pPathString as ObjcId,
 private foreign handler objC_NSURLfileURLWithPath(in pPathString as ObjcId) returns ObjcId binds to "objc:NSURL.+fileURLWithPath:"
 private foreign handler objC_NSURLGetAbsoluteString(in pURLString as ObjcId) returns ObjcId binds to "objc:NSURL.absoluteString"
 private foreign handler objC_NSURLGetPath(in pURLString as ObjcId) returns ObjcId binds to "objc:NSURL.path"
+
 private foreign handler c_NSClassFromString(in pClassNameString as ObjcId) returns ObjcId binds to "c:NSClassFromString"
 
 private foreign handler objC_NSErrorAlloc() returns ObjcId binds to "objc:NSError.+alloc"
@@ -131,6 +137,8 @@ private foreign handler ObjC_NSViewControllerAlloc() returns ObjcRetainedId bind
 private foreign handler ObjC_NSViewControllerDealloc(in pNSViewController as ObjcId) returns nothing binds to "objc:NSViewController.-dealloc"
 
 
+
+
 --------------------- Private handlers
 
 private handler LogNSObjectClassName(in tNSObj as optional ObjcId)
@@ -170,6 +178,40 @@ end handler
 ----------------------------- Public handlers ----------------------------------
 
 --------------------------------------------------------------------------------
+
+
+/**
+Summary: Returns the users home directory.
+
+Returns:  Users home directory
+*/
+public handler GetrCurrentUserHomeURL() returns any
+	variable tSharedFileManager as ObjcObject
+	variable tUserHomeDir as optional ObjcObject
+	variable tUserHomeDirStr as optional String
+	variable tNSUrl as optional ObjcObject
+	variable tNSPath as optional ObjcObject
+   variable tNSURLString as optional ObjcObject
+   variable tNSString as optional ObjcObject
+	unsafe
+   	put NSFileManagerSharedManager() into tSharedFileManager
+      -- log tSharedFileManager
+      -- LogNSObjectClassName(tSharedFileManager)
+   	put NSFileManagerCurrentUserHomeURL(tSharedFileManager) into tUserHomeDir
+      -- log tUserHomeDir
+      -- LogNSObjectClassName(tUserHomeDir) --- should log NSURL
+      put objC_NSURLGetAbsoluteString(tUserHomeDir) into tNSURLString
+      put objC_NSURLGetPath(tUserHomeDir) into tNSPath
+       -- return StringFromNSString(tNSPath)
+      -- return StringFromNSString(tUserHomeDir)
+      -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
+
+      return ( StringFromNSString(tNSURLString) & "\n" & StringFromNSString(tNSPath) )
+
+	end unsafe
+   -- return ""
+end handler
+
 
 /**
 Badge the App's Dock Icon with a small string of text.
