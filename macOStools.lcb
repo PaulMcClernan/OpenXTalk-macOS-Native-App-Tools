@@ -58,7 +58,10 @@ private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns 
 
 private foreign handler NSFileManagerSharedManager() returns ObjcId binds to "objc:NSFileManager.+defaultManager"
 private foreign handler NSFileManagerCurrentUserHomeURL(in pNSSharedFilemanager as ObjcId) returns ObjcId binds to "objc:NSFileManager.homeDirectoryForCurrentUser"
-
+private foreign handler NSFileManagerAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns optional ObjcId binds to "objc:NSFileManager.-attributesOfItemAtPath:error:"
+-- - (BOOL)setAttributes:(NSDictionary<NSFileAttributeKey, id> *)attributes
+--         ofItemAtPath:(NSString *)path
+--                error:(NSError * _Nullable *)error;
 
 private foreign handler ObjC_NSWorkspaceSharedWorkspace() returns ObjcId binds to "objc:NSWorkspace.+sharedWorkspace"
 private foreign handler ObjC_NSWorkspaceSelectFile(in pSharedWorkspace as ObjcId, in pFilename as ObjcId, in pRootedAtPath as ObjcId) returns CBool binds to "objc:NSWorkspace.-selectFile:inFileViewerRootedAtPath:"
@@ -79,7 +82,7 @@ private foreign handler objC_NSURLGetPath(in pURLString as ObjcId) returns ObjcI
 
 private foreign handler c_NSClassFromString(in pClassNameString as ObjcId) returns ObjcId binds to "c:NSClassFromString"
 
-private foreign handler objC_NSErrorAlloc() returns ObjcId binds to "objc:NSError.+alloc"
+private foreign handler objC_NSErrorAlloc() returns ObjcRetainedId binds to "objc:NSError.+alloc"
 private foreign handler objC_NSObjectRetain(in pNSObj as ObjcId) returns ObjcId binds to "objc:NSObject.-retain"
 private foreign handler objC_NSObjectAutoRealease(in pNSObj as ObjcId) returns ObjcId binds to "objc:NSObject.-autorelease"
 private foreign handler objC_NSObjectRelease(in pNSObj as ObjcId) returns nothing binds to "objc:NSObject.-release"
@@ -181,11 +184,11 @@ end handler
 
 
 /**
-Summary: Returns the users home directory.
+Summary: Returns the users home directory as URL and as a Path.
 
-Returns:  Users home directory
+Returns:  Users home directory as a URL string and as a Path string seperated by a newline.
 */
-public handler GetrCurrentUserHomeURL() returns any
+public handler GetrCurrentUserHome() returns any
 	variable tSharedFileManager as ObjcObject
 	variable tUserHomeDir as optional ObjcObject
 	variable tUserHomeDirStr as optional String
@@ -212,6 +215,74 @@ public handler GetrCurrentUserHomeURL() returns any
    -- return ""
 end handler
 
+
+-- foreign handler MCDataGetBytePtr(in pData as Data) returns Pointer binds to "<builtin>"
+public handler getFourCharCodeFromUint32( in pNum as optional any) returns optional String
+   -- 1383023468 = appl
+   variable tStr as String
+   variable tTempStr as String
+   variable tNum as Number
+   variable tBinsStr as String
+   -- log pNum
+   if pNum is not nothing then
+      if pNum is a number then
+         put pNum formatted as string into pNum
+      end if
+      put pNum converted from base 10 to base 16 into tBinsStr
+      if (the number of chars in tBinsStr) < 8 then
+         put 8 - (the number of chars in tBinsStr) into tNum
+         repeat tNum times
+            put "0" before tBinsStr
+         end repeat
+         -- log tBinsStr
+      end if
+       put ( (char 1 to 2 of tBinsStr) converted from base 16 to base 10 ) into tTempStr
+       put the char with code (tTempStr parsed as number) into tStr
+       put ( (char 3 to 4 of tBinsStr) converted from base 16 to base 10 ) into tTempStr
+       put the char with code (tTempStr parsed as number) after tStr
+       put ( (char 5 to 6 of tBinsStr) converted from base 16 to base 10 ) into tTempStr
+       put the char with code (tTempStr parsed as number) after tStr
+       put ( (char 7 to 8 of tBinsStr) converted from base 16 to base 10 ) into tTempStr
+       put the char with code (tTempStr parsed as number) after tStr
+      return tStr
+   else
+      return the empty string
+   end if
+end handler
+
+public handler GetHFSCreatorTypeCodesOfFile(in pPathToFile as String) returns any
+	variable tSharedFileManager as ObjcObject
+	variable rNSError as optional ObjcObject
+	variable tAttributesNSDict as optional ObjcObject
+	variable tNSPath as optional ObjcObject
+   variable tNSURLString as optional ObjcObject
+   variable tNSString as optional ObjcObject
+   variable tAttributesArray as optional Array
+
+	unsafe
+   	put NSFileManagerSharedManager() into tSharedFileManager
+      -- log tSharedFileManager
+      -- LogNSObjectClassName(tSharedFileManager)
+      put objC_NSErrorAlloc() into rNSError
+      -- LogNSObjectClassName(rNSError)
+      put nothing into rNSError
+   	put NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
+      LogNSObjectClassName(rNSError)
+      LogNSObjectClassName(tAttributesNSDict) --- should log 'NSDictionary'?
+      put ArrayFromNSDictionary(tAttributesNSDict) into tAttributesArray
+      log tAttributesArray
+      return getFourCharCodeFromUint32(tAttributesArray["NSFileHFSCreatorCode"]) &"\n"& getFourCharCodeFromUint32(tAttributesArray["NSFileHFSTypeCode"])
+      -- put objC_NSURLGetAbsoluteString(tUserHomeDir) into tNSURLString
+      -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
+       -- return StringFromNSString(tNSPath)
+      -- return StringFromNSString(tUserHomeDir)
+      -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
+
+      -- return ( StringFromNSString(tNSURLString) & "\n" & StringFromNSString(tNSPath) )
+
+	end unsafe
+   -- return ""
+end handler
 
 /**
 Badge the App's Dock Icon with a small string of text.
