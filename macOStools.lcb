@@ -25,6 +25,9 @@ public foreign type CGSize binds to "MCAggregateTypeInfo:qq"
 public foreign type NSRect binds to "MCAggregateTypeInfo:qqqq"
 public foreign type CGImageRef binds to "MCAggregateTypeInfo:r"
 public foreign type CGPoint binds to "MCAggregateTypeInfo:qq"
+-- private foreign handler NSRangeMakeRange( in pStart as CUint, in pLegth as CUint)) returns ObjcId binds to "c:NSMakeRange"
+-- NSMakeRange(0,100)
+public foreign type NSRange binds to "MCAggregateTypeInfo:ii"
 
 private variable sMyWindow as optional ObjcObject
 private variable sMyWindowController as optional ObjcObject
@@ -63,9 +66,13 @@ private foreign handler NSFileManagerSharedManager() returns ObjcId binds to "ob
 private foreign handler NSFileManagerCurrentUserHomeURL(in pNSSharedFilemanager as ObjcId) returns ObjcId binds to "objc:NSFileManager.homeDirectoryForCurrentUser"
 private foreign handler NSFileManagerAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns optional ObjcId binds to "objc:NSFileManager.-attributesOfItemAtPath:error:"
 private foreign handler NSFileManagerSetAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pAtributesNSDict as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns cBool binds to "objc:NSFileManager.-setAttributes:ofItemAtPath:error:"
--- - (BOOL)setAttributes:(NSDictionary<NSFileAttributeKey, id> *)attributes
---         ofItemAtPath:(NSString *)path
---                error:(NSError * _Nullable *)error;
+
+
+private foreign handler NSAppleScriptAlloc() returns ObjcRetainedId binds to "objc:NSAppleScript.+alloc"
+private foreign handler NSAppleScriptInitWithSource( in pNSAppleScript as ObjcId, in pNSStringAppleScript as ObjcId) returns ObjcId binds to "objc:NSAppleScript.-initWithSource:"
+private foreign handler NSAppleScriptCompileAndReturnError( in pNSAppleScript as ObjcId, inout rErrorNSDict as optional ObjcId) returns CBool binds to "objc:NSAppleScript.-compileAndReturnError:"
+private foreign handler NSAppleScriptExecuteAndReturnError( in pNSAppleScript as ObjcId, inout rErrorNSDict as optional ObjcId) returns CBool binds to "objc:NSAppleScript.-executeAndReturnError:"
+private foreign handler NSAppleScriptGetRichTextSource( in pNSAppleScript as ObjcId) returns optional ObjcId binds to "objc:NSAppleScript.richTextSource"
 
 private foreign handler ObjC_NSWorkspaceSharedWorkspace() returns ObjcId binds to "objc:NSWorkspace.+sharedWorkspace"
 private foreign handler ObjC_NSWorkspaceSelectFile(in pSharedWorkspace as ObjcId, in pFilename as ObjcId, in pRootedAtPath as ObjcId) returns CBool binds to "objc:NSWorkspace.-selectFile:inFileViewerRootedAtPath:"
@@ -102,6 +109,9 @@ private foreign handler objC_NSMutableArrayInitWithCapacity(in pNSMutableArray a
 private foreign handler objC_NSMutableArrayInitWithNSArray(in pNSMutableArray as ObjcId, in pNSArray as ObjcId) returns ObjcId binds to "objc:NSMutableArray.-initWithArray:"
 
 private foreign handler c_CFErrorCopyDescription(in pCFErrorRef as ObjcId) returns ObjcId binds to "c:CFErrorCopyDescription"
+
+private foreign handler NSAttributedStringLength(in pNSAttributedString as ObjcId) returns CUint binds to "objc:NSAttributedString.length"
+private foreign handler NSAttributedStringString(in pNSAttributedString as ObjcId) returns ObjcId binds to "objc:NSAttributedString.string"
 
 private foreign handler ObjC_NSWindowAlloc() returns ObjcRetainedId binds to "objc:NSWindow.+alloc"
 private foreign handler ObjC_NSWindowInitWithRectStyleBackingDefer(in pObj as ObjcRetainedId, in pRect as NSRect, in pStyleMask as CLong, in pBackingStoreType as CLong, in pDefer as CBool) \
@@ -181,13 +191,6 @@ private handler _NSWindowGetCollectionBehavior(in pNSWindow as ObjcId) returns C
 	return collectionBehavior
 end handler
 
-
-
-
-
-
-
--------------------------------------------------------------------------------------------------------
 public handler NSArrayToString(in pNSArray as ObjcObject) returns String
   variable tNSArray as ObjcObject
   variable tNSString as ObjcObject
@@ -273,6 +276,66 @@ end handler
 
 --------------------------------------------------------------------------------
 
+
+public handler appleScriptObjTests(in pAppleScript as String) returns any
+	variable tNSAppleScriptObj as ObjcObject
+	variable rErrorDictionary as optional ObjcObject
+	variable tSuccess as Boolean
+	variable tNSPath as optional ObjcObject
+   variable tNSURLAtribString as optional ObjcObject
+   variable tNSString as optional ObjcId
+   variable tString as String
+   variable tNSNumber as optional ObjcObject
+   variable tCUInt as optional CUint
+   variable tNSRange as optional NSRange
+
+   variable tAttributesArray as optional Array
+	unsafe
+   	put NSAppleScriptAlloc() into tNSAppleScriptObj
+      -- put ArrayToNSDictionary(the empty array) into rErrorDictionary
+      -- log tSharedFileManager`
+      -- LogNSObjectClassName(tNSAppleScriptObj)
+      -- put objC_NSErrorAlloc() into rNSError
+      -- LogNSObjectClassName(rNSError)
+      --put nothing into rErrorDictionary
+   	put NSAppleScriptInitWithSource( tNSAppleScriptObj, StringToNSString(pAppleScript)) into tNSAppleScriptObj
+      LogNSObjectClassName(tNSAppleScriptObj)
+      put NSAppleScriptCompileAndReturnError(tNSAppleScriptObj , rErrorDictionary ) into tSuccess
+      -- put NSAppleScriptExecuteAndReturnError(tNSAppleScriptObj , rErrorDictionary ) into tSuccess
+      if tSuccess then
+         -- put 0 into tCUInt
+         -- put tCUInt into element 1 of tNSRange --- start
+         put NSAppleScriptGetRichTextSource(tNSAppleScriptObj) into tNSURLAtribString
+         LogNSObjectClassName(tNSURLAtribString)
+         put NSAttributedStringLength(tNSURLAtribString) into tCUInt
+         log tCUInt
+         put NSAttributedStringString(tNSURLAtribString) into tNSString
+         put StringFromNSString(tNSString) into tString
+         log tString
+         -- put StringFromNSString( tNSURLAtribString ) into tString
+         -- put ArrayFromNSDictionary(tNSURLAtribString) into tAttributesArray
+        -- log [the keys of tAttributesArray]
+         --return tSuccess
+          -- put nothing into tNSRange
+          -- put tCUInt into element 2 of tNSRange --- legth
+          -- log tNSRange
+      else
+        put ArrayFromNSDictionary(rErrorDictionary) into tAttributesArray
+        log tAttributesArray
+        --return tSuccess
+     end if
+      --return getFourCharCodeFromUint32(tAttributesArray["NSFileHFSCreatorCode"]) &"\n"& getFourCharCodeFromUint32(tAttributesArray["NSFileHFSTypeCode"])
+      -- put objC_NSURLGetAbsoluteString(tUserHomeDir) into tNSURLString
+      -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
+       -- return StringFromNSString(tNSPath)
+      -- return StringFromNSString(tUserHomeDir)
+      -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
+      -- return ( StringFromNSString(tNSURLString)    & "\n" & StringFromNSString(tNSPath) )
+	end unsafe
+   return tSuccess
+end handler
+
+
 /**
 Summary: Returns the users home directory as URL and as a Path.
 
@@ -295,12 +358,8 @@ public handler GetrCurrentUserHome() returns any
       -- LogNSObjectClassName(tUserHomeDir) --- should log NSURL
       put objC_NSURLGetAbsoluteString(tUserHomeDir) into tNSURLString
       put objC_NSURLGetPath(tUserHomeDir) into tNSPath
-       -- return StringFromNSString(tNSPath)
-      -- return StringFromNSString(tUserHomeDir)
-      -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
 
       return ( StringFromNSString(tNSURLString) & "\n" & StringFromNSString(tNSPath) )
-
 	end unsafe
    -- return ""
 end handler
@@ -313,7 +372,6 @@ public handler GetHFSCreatorTypeCodesOfFile(in pPathToFile as String) returns an
    variable tNSURLString as optional ObjcObject
    variable tNSString as optional ObjcObject
    variable tAttributesArray as optional Array
-
 	unsafe
    	put NSFileManagerSharedManager() into tSharedFileManager
       -- log tSharedFileManager
@@ -332,13 +390,10 @@ public handler GetHFSCreatorTypeCodesOfFile(in pPathToFile as String) returns an
        -- return StringFromNSString(tNSPath)
       -- return StringFromNSString(tUserHomeDir)
       -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
-
       -- return ( StringFromNSString(tNSURLString) & "\n" & StringFromNSString(tNSPath) )
-
 	end unsafe
    -- return ""
 end handler
-
 
 public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOSType as String ) returns any
 	variable tSharedFileManager as ObjcObject
@@ -350,7 +405,6 @@ public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOS
    variable tAttributesArray as optional Array
    variable tStatus as Boolean
    variable tOSType as UInt32
-
 	unsafe
    	put NSFileManagerSharedManager() into tSharedFileManager
       -- log tSharedFileManager
@@ -372,9 +426,7 @@ public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOS
        -- return StringFromNSString(tNSPath)
       -- return StringFromNSString(tUserHomeDir)
       -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
-
       -- return ( StringFromNSString(tNSURLString) & "\n" & StringFromNSString(tNSPath) )
-
 	end unsafe
    return ""
 end handler
