@@ -77,6 +77,36 @@ state of the stack.
 
 
 
+Name: setAppToLightMode
+
+Type: handler
+
+Syntax: setAppToLightMode()
+
+Summary: Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
+
+Example: setAppToDarkMode the windowID of this stack
+
+Description: This sets an Apps appearance to Light Mode, with all app windows inheriting the dark appearance
+
+
+
+
+Name: setAppToDarkMode
+
+Type: handler
+
+Syntax: setAppToDarkMode()
+
+Summary: Assign the macOS native "Vibrant Dark" appearance style to all app windows
+
+Example: setAppToDarkMode the windowID of this stack
+
+Description: This sets an Apps appearance to Dark Mode, with all app windows inheriting the dark appearance
+
+
+
+
 Name: PostUserNotification
 
 Type: handler
@@ -108,36 +138,6 @@ String values for postTitle and subTitle truncated to a length appropriate for
 display and it's properties modified to reflect any truncations.
 For soundName Pass empty for silent or pass any sound file in any of the OS
 Library/Audio/Sounds folders, if no match is found a default alert sound is used.
-
-
-
-Name: setAppToDarkMode
-
-Type: handler
-
-Syntax: setAppToDarkMode()
-
-Summary: Assign the macOS native "Vibrant Dark" appearance style to all app windows
-
-Example: setAppToDarkMode the windowID of this stack
-
-Description: This sets an Apps appearance to Dark Mode, with all app windows inheriting the dark appearance
-
-
-
-
-Name: setAppToLightMode
-
-Type: handler
-
-Syntax: setAppToLightMode()
-
-Summary: Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
-
-Example: setAppToDarkMode the windowID of this stack
-
-Description: This sets an Apps appearance to Light Mode, with all app windows inheriting the dark appearance
-
 
 
 
@@ -283,6 +283,19 @@ The FullScreenAllowed must first be enabled for this to work (system requirement
 
 
 
+Name: GetrCurrentUserHome
+
+Type: handler
+
+Syntax: GetrCurrentUserHome()
+
+Summary: Returns the users home directory as URL and as a Path.
+
+Returns: Users home directory as a URL string and as a Path string seperated by a newline.
+
+
+
+
 Name: MiniaturizeAll
 
 Type: handler
@@ -299,16 +312,17 @@ This is the programatic equivelant to option-clicking the yellow minimize button
 
 
 
-Name: GetrCurrentUserHomeURL
+Name: GetRunningApplications
 
 Type: handler
 
-Syntax: GetrCurrentUserHomeURL()
+Syntax: GetRunningApplications()
 
-Summary: Returns the users home directory.
+Summary: Returns a information about running applications as a line demilited list.
 
-Returns: Users home directory
-
+Returns:
+Returns a line delimited list of information about the currently
+running applications as a line demilited list.
 
 
 
