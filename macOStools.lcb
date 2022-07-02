@@ -29,6 +29,8 @@ public foreign type CGPoint binds to "MCAggregateTypeInfo:qq"
 -- NSMakeRange(0,100)
 public foreign type NSRange binds to "MCAggregateTypeInfo:ii"
 
+
+
 private variable sMyWindow as optional ObjcObject
 private variable sMyWindowController as optional ObjcObject
 
@@ -129,6 +131,9 @@ private foreign handler ObjC_NSWindowDeminiaturize(in pNSWindow as ObjcId, in pS
 private foreign handler ObjC_NSWindowIsMiniaturized(in pNSWindow as ObjcId) returns CBool binds to "objc:NSWindow.isMiniaturized"
 private foreign handler ObjC_NSWindowGetStyleMask(in pNSWindow as ObjcId) returns CLong binds to "objc:NSWindow.-styleMask"
 private foreign handler ObjC_NSWindowSetStyleMask(in pNSWindow as ObjcId, in pOptions as CInt) returns nothing binds to "objc:NSWindow.-setStyleMask:"
+
+private foreign handler ObjC_NSWindowGetFrameRect(in pNSWindow as ObjcId) returns NSRect binds to "objc:NSWindow.frame"
+
 private foreign handler ObjC_NSWindowSetLevel(in pNSWindow as ObjcId, in pLevel as CInt) returns nothing binds to "objc:NSWindow.-setLevel:"
 private foreign handler ObjC_NSWindowGetLevel(in pNSWindow as ObjcId) returns CInt binds to "objc:NSWindow.-level"
 private foreign handler ObjC_NSWindowGetReleasedWhenClosed(in pNSWindow as ObjcId) returns CBool binds to "objc:NSWindow.isReleasedWhenClosed"
@@ -666,6 +671,35 @@ public handler setWindowToDarkMode(in pWindowID as Integer) returns nothing
          ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("titlebarAppearsTransparent"))
          --ObjC_NSWindowSetTitleVisibility(tNSWindow,NumberToNSNumber(1)) --- 1 = TitleBar hidden, 0 = TitleBar Visible
          -- window?.appearance
+		end unsafe
+	end if
+end handler
+
+
+
+public handler getNSWindowFrameRect(in pWindowID as Integer) returns String
+	if (the operating system is "mac") then
+		variable tNSWindow as optional ObjcId
+      variable tNSWindowRect as optional NSRect
+      variable tCUInt as optional CSint
+      variable rReturnString as optional String
+      put the empty string into rReturnString
+		unsafe
+			put _NSWindowFromWindowID(pWindowID) into tNSWindow
+         ------------------------------------------------------------------ return window rect ------------------------------------------------------
+         put ObjC_NSWindowGetFrameRect( tNSWindow ) into tNSWindowRect
+         log tNSWindowRect
+         -- apparently the NSRect coords are in a different order than the xTalk engine.
+         -- so reorder them...
+         put element 1 of tNSWindowRect into tCUInt
+         put tCUInt formatted as string & "," after rReturnString
+         put element 3 of tNSWindowRect into tCUInt
+         put tCUInt formatted as string & "," after rReturnString
+         put element 4 of tNSWindowRect into tCUInt
+         put tCUInt formatted as string & "," after rReturnString
+         put element 2 of tNSWindowRect into tCUInt
+         put tCUInt formatted as string after rReturnString
+         return rReturnString
 		end unsafe
 	end if
 end handler
