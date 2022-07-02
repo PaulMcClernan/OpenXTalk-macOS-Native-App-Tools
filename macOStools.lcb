@@ -134,6 +134,11 @@ private foreign handler ObjC_NSWindowSetStyleMask(in pNSWindow as ObjcId, in pOp
 
 private foreign handler ObjC_NSWindowGetFrameRect(in pNSWindow as ObjcId) returns NSRect binds to "objc:NSWindow.frame"
 
+-- NSStringFromRect is handy when used in conjunction with Log for printing debug messages:
+private foreign handler c_NSStringFromRect(in pNSRect as NSRect) returns ObjcId binds to "c:NSStringFromRect"
+-- c_NSRectFromString is super handy, it parses an NSstring for four numbers in order orig x, orig y, width, height:
+private foreign handler c_NSRectFromString(in pNSString as ObjcId) returns optional NSRect binds to "c:NSRectFromString"
+
 private foreign handler ObjC_NSWindowSetLevel(in pNSWindow as ObjcId, in pLevel as CInt) returns nothing binds to "objc:NSWindow.-setLevel:"
 private foreign handler ObjC_NSWindowGetLevel(in pNSWindow as ObjcId) returns CInt binds to "objc:NSWindow.-level"
 private foreign handler ObjC_NSWindowGetReleasedWhenClosed(in pNSWindow as ObjcId) returns CBool binds to "objc:NSWindow.isReleasedWhenClosed"
@@ -144,7 +149,6 @@ private foreign handler ObjC_NSWindowSetContentViewController(in pNSWindow as Ob
 private foreign handler ObjC_NSWindowGetContentViewController(in pOpNSWindowbj as ObjcId) returns ObjcId binds to "objc:NSWindow.-contentViewController"
 private foreign handler ObjC_NSWindowGetWindowController(in pNSWindow as ObjcId) returns ObjcId binds to "objc:NSWindow.-windowController"
 private foreign handler ObjC_NSWindowSetBoolValueForKey( in pNSWindow as ObjcId, in pValue as CBool, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
-
 
 private foreign handler ObjC_NSWindowControllerAlloc() returns ObjcRetainedId binds to "objc:NSWindowController.+alloc"
 private foreign handler ObjC_NSWindowControllerDealloc(in pNSWindowController as ObjcId) returns nothing binds to "objc:NSWindowController.-dealloc"
@@ -679,26 +683,40 @@ end handler
 
 public handler getNSWindowFrameRect(in pWindowID as Integer) returns String
 	if (the operating system is "mac") then
-		variable tNSWindow as optional ObjcId
+		variable tNSString as optional ObjcId
+      variable tNSWindow as optional ObjcId
       variable tNSWindowRect as optional NSRect
+
       variable tCUInt as optional CSint
       variable rReturnString as optional String
       put the empty string into rReturnString
 		unsafe
+
+      -- test
+      -- variable tNSRect as optional NSRect
+      -- put c_NSRectFromString(StringToNSString("100.4,-34,500,900")) into tNSRect
+      -- slog tNSRect
+
 			put _NSWindowFromWindowID(pWindowID) into tNSWindow
          ------------------------------------------------------------------ return window rect ------------------------------------------------------
          put ObjC_NSWindowGetFrameRect( tNSWindow ) into tNSWindowRect
-         log tNSWindowRect
-         -- apparently the NSRect coords are in a different order than the xTalk engine.
-         -- so reorder them...
+         -- log tNSWindowRect
+         -- apparently the NSRect coords are different than the xTalk engine.
+         -- NSRect (origin.x, origin.y, size.width, size.height)
+         -- origin is from BOTTOM left vs xTalk's origin Y from the TOP of the screen
+         -- to translate between NSWindow NSRect to Stack Rectangle we need the screen height.
+         put c_NSStringFromRect(tNSWindowRect) into tNSString
+         put StringFromNSString(tNSString) into rReturnString
+         log rReturnString
+
          put element 1 of tNSWindowRect into tCUInt
-         put tCUInt formatted as string & "," after rReturnString
-         put element 3 of tNSWindowRect into tCUInt
-         put tCUInt formatted as string & "," after rReturnString
-         put element 4 of tNSWindowRect into tCUInt
-         put tCUInt formatted as string & "," after rReturnString
+         put "origin x: " &  tCUInt formatted as string & "," into rReturnString
          put element 2 of tNSWindowRect into tCUInt
-         put tCUInt formatted as string after rReturnString
+         put "origin y: " & tCUInt formatted as string & "," after rReturnString
+         put element 3 of tNSWindowRect into tCUInt
+         put "width: " & tCUInt formatted as string & "," after rReturnString
+         put element 4 of tNSWindowRect into tCUInt
+         put "height: " & tCUInt formatted as string after rReturnString
          return rReturnString
 		end unsafe
 	end if
