@@ -69,7 +69,6 @@ private foreign handler NSFileManagerCurrentUserHomeURL(in pNSSharedFilemanager 
 private foreign handler NSFileManagerAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns optional ObjcId binds to "objc:NSFileManager.-attributesOfItemAtPath:error:"
 private foreign handler NSFileManagerSetAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pAtributesNSDict as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns cBool binds to "objc:NSFileManager.-setAttributes:ofItemAtPath:error:"
 
-
 private foreign handler NSAppleScriptAlloc() returns ObjcRetainedId binds to "objc:NSAppleScript.+alloc"
 private foreign handler NSAppleScriptInitWithSource( in pNSAppleScript as ObjcId, in pNSStringAppleScript as ObjcId) returns ObjcId binds to "objc:NSAppleScript.-initWithSource:"
 private foreign handler NSAppleScriptCompileAndReturnError( in pNSAppleScript as ObjcId, inout rErrorNSDict as optional ObjcId) returns CBool binds to "objc:NSAppleScript.-compileAndReturnError:"
@@ -102,6 +101,8 @@ private foreign handler objC_NSObjectRelease(in pNSObj as ObjcId) returns nothin
 private foreign handler objC_NSObjectDescription(in pNSObj as optional ObjcId) returns ObjcId binds to "objc:NSObject.description"
 private foreign handler objC_NSObjectClassName(in pNSObj as ObjcId) returns ObjcId binds to "objc:NSObject.className"
 private foreign handler objC_NSObjectGetSuperClass(in pNSObj as ObjcId) returns ObjcRetainedId binds to "c:NObject.+superclass:"
+private foreign handler objC_NSObjectSetValueForKey(in pAVAUSampler as ObjcId, in pValue as ObjcId, in pSelector as ObjcId) returns optional ObjcId binds to "objc:NSObject.-setValue:forKey:"
+private foreign handler objC_NSObjectGetValueForKey(in pNSObject as ObjcId, in pSelector as ObjcId) returns optional ObjcId binds to "objc:NSObject.-valueForKey:"
 
 private foreign handler ObjC_NSBundleWithURL(in pNSURL as ObjcId) returns ObjcId binds to "objc:NSBundle.+bundleWithURL:"
 private foreign handler ObjC_NSBundleGetClassNamed(in pNSbundle as ObjcId,in pClassNameNSString as ObjcId) returns ObjcId binds to "objc:NSBundle.-classNamed:"
@@ -126,6 +127,7 @@ private foreign handler ObjC_NSWindowSetValueForKey( in pNSWindow as ObjcId, in 
 private foreign handler ObjC_NSWindowSetTitle(in pNSWindow as ObjcId, in pTitleNSStr as ObjcId) returns nothing binds to "objc:NSWindow.-setTitle:"
 private foreign handler ObjC_NSWindowSetTitleVisibility(in pNSWindow as ObjcId, in pVisibleUnum as ObjcId) returns nothing binds to "objc:NSWindow.-setTitleVisibility:"
 private foreign handler ObjC_NSWindowSetAppearance(in pNSWindow as ObjcId, in pAppearanceNameNSStr as ObjcId) returns nothing binds to "objc:NSWindow.-setAppearance:"
+-- private foreign handler ObjC_NSWindowGetAppearance(in pNSWindow as ObjcId, in pAppearanceNameNSStr as ObjcId) returns ObjcId binds to "objc:NSWindow.-appearance:"
 private foreign handler ObjC_NSWindowPerformMiniaturize(in pNSWindow as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSWindow.-performMiniaturize:" -- (void)performMiniaturize:(id)sender;
 private foreign handler ObjC_NSWindowDeminiaturize(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-deminiaturize:"
 private foreign handler ObjC_NSWindowIsMiniaturized(in pNSWindow as ObjcId) returns CBool binds to "objc:NSWindow.isMiniaturized"
@@ -134,10 +136,20 @@ private foreign handler ObjC_NSWindowSetStyleMask(in pNSWindow as ObjcId, in pOp
 
 private foreign handler ObjC_NSWindowGetFrameRect(in pNSWindow as ObjcId) returns NSRect binds to "objc:NSWindow.frame"
 
+private foreign handler ObjC_NSWindowAllowsAutoTabbing(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.allowsAutomaticWindowTabbing"
+-- private foreign handler NSAppMergeAllWindows( in pSenderNSObj as ObjcId ) returns nothing binds to "objc:.-mergeAllWindows"
+private foreign handler NSWindowMergeAllWindows( in pNSWindow as ObjcId, in pSenderID as ObjcId ) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
+-- private foreign handler NSWindowMergeAllWindows(in pNSWindow as optional ObjcId) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
+
+private foreign handler ObjC_NSWindowToggleTabBar(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-toggleTabBar:"
+private foreign handler ObjC_NSWindowToggleTabOverview(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-toggleTabOverview:"
+
+
 -- NSStringFromRect is handy when used in conjunction with Log for printing debug messages:
 private foreign handler c_NSStringFromRect(in pNSRect as NSRect) returns ObjcId binds to "c:NSStringFromRect"
 -- c_NSRectFromString is super handy, it parses an NSstring for four numbers in order orig x, orig y, width, height:
 private foreign handler c_NSRectFromString(in pNSString as ObjcId) returns optional NSRect binds to "c:NSRectFromString"
+
 
 private foreign handler ObjC_NSWindowSetLevel(in pNSWindow as ObjcId, in pLevel as CInt) returns nothing binds to "objc:NSWindow.-setLevel:"
 private foreign handler ObjC_NSWindowGetLevel(in pNSWindow as ObjcId) returns CInt binds to "objc:NSWindow.-level"
@@ -149,6 +161,8 @@ private foreign handler ObjC_NSWindowSetContentViewController(in pNSWindow as Ob
 private foreign handler ObjC_NSWindowGetContentViewController(in pOpNSWindowbj as ObjcId) returns ObjcId binds to "objc:NSWindow.-contentViewController"
 private foreign handler ObjC_NSWindowGetWindowController(in pNSWindow as ObjcId) returns ObjcId binds to "objc:NSWindow.-windowController"
 private foreign handler ObjC_NSWindowSetBoolValueForKey( in pNSWindow as ObjcId, in pValue as CBool, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
+private foreign handler ObjC_NSWindowGetBoolValueForKey( in pNSWindow as ObjcId, in pSelector as ObjcId) returns CBool binds to "objc:NSWindow.-value:ForKey:"
+
 
 private foreign handler ObjC_NSWindowControllerAlloc() returns ObjcRetainedId binds to "objc:NSWindowController.+alloc"
 private foreign handler ObjC_NSWindowControllerDealloc(in pNSWindowController as ObjcId) returns nothing binds to "objc:NSWindowController.-dealloc"
@@ -200,7 +214,7 @@ private handler _NSWindowGetCollectionBehavior(in pNSWindow as ObjcId) returns C
 	return collectionBehavior
 end handler
 
-public handler NSArrayToString(in pNSArray as ObjcObject) returns String
+private handler NSArrayToString(in pNSArray as ObjcObject) returns String
   variable tNSArray as ObjcObject
   variable tNSString as ObjcObject
   variable tStr as String
@@ -274,11 +288,14 @@ public handler getBitFeild( in pNum as optional any) returns optional String
             put "0" before tStr
          end repeat
       end if
+      put tStr converted from base 2 into tNum
+      log tNum
       return tStr
   else
      return "0"
   end if
 end handler
+
 --------------------------------------------------------------------------------
 
 ----------------------------- Public handlers ----------------------------------
@@ -915,6 +932,86 @@ public handler AppHide() returns nothing
 			variable sharedApplication as ObjcId
 			put NSApplicationSharedApplication() into sharedApplication
 			NSApplicationHide(sharedApplication, nothing)
+		end unsafe
+	end if
+end handler
+
+
+/**
+*/
+public handler UnifyTitleAndToolbar( in pWindowID as Integer ) returns nothing
+   variable rType as optional any
+   variable rBool as optional Boolean
+   variable sharedApplication as ObjcId
+   variable tNSWindow as optional ObjcId
+   variable tNSWindowController as optional ObjcId
+   variable tNSWindowContentViewController as optional ObjcId
+   variable tNSAppearance as optional ObjcId
+   variable tNSObj as optional ObjcObject
+	if (the operating system is "mac") then
+		unsafe
+			put _NSWindowFromWindowID(pWindowID) into tNSWindow
+         -- log tNSWindow
+          variable tStyleMask as optional CUInt
+          put ObjC_NSWindowGetStyleMask(tNSWindow) into tStyleMask
+          log getBitFeild(tStyleMask)
+          -- a regular window with full decorations should log: 15  "00000000000000000000000000001111"
+          -- UnifyTitleAndToolbar logs: 36871 "00000000000000001001000000000111"
+          ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("titlebarAppearsTransparent")) --- add this and other NSWindow properties to lcb_MacTools
+          put ( 1 + 2 + 4 + 16 + 4096 + 32768 ) into tStyleMask -- UnifiedTitleAndToolbar, FullSizeContentView
+          ObjC_NSWindowSetStyleMask(tNSWindow,tStyleMask)
+		end unsafe
+	end if
+end handler
+
+
+/**
+*/
+-- private variable mNSObj as optional ObjcObject
+public handler MergeAllWindows( in pWindowID as Integer ) returns nothing
+   variable rType as optional any
+   variable rBool as optional Boolean
+   variable sharedApplication as ObjcId
+   variable tNSWindow as optional ObjcId
+   variable tNSWindowController as optional ObjcId
+   variable tNSWindowContentViewController as optional ObjcId
+   variable tNSAppearance as optional ObjcId
+   variable tNSObj as optional ObjcObject
+
+	if (the operating system is "mac") then
+		unsafe
+         -- put objC_NSObjectGetValueForKey( NSObj,StringToNSString("selector")) into rType
+
+      -- return NumberFromNSNumber(rGain)
+			-- put NSApplicationSharedApplication() into sharedApplication
+         -- NSApplicationMergeAllWindows( sharedApplication )
+         -- put objC_NSObjectGetValueForKey( sharedApplication,StringToNSString("allowsAutomaticWindowTabbing")) into rBool
+         -- log rBool
+		 --   NSObjMergeAllWindows(sharedApplication)
+			put _NSWindowFromWindowID(pWindowID) into tNSWindow
+         -- log tNSWindow
+         -- NSWindowMergeAllWindows( pWindowID )
+         ------------------------------------------------------------------- It seems thst LiveCode stack windows on macOS are  customized class of NSWindow
+         -- LogNSObjectClassName(tNSWindow) -- logs the class name as "com_runrev_livecode_MCWindow"
+         -- put ObjC_NSWindowGetWindowController(tNSWindow) into tNSWindowController
+         -- log tNSWindowController --- logs null, so apparently the stack window class "com_runrev_livecode_MCWindow" has no NSWindowController assigned to it.
+         -- put ObjC_NSWindowGetContentViewController(tNSWindow) into tNSWindowContentViewController
+         -- log tNSWindowContentViewController --- logs null, so apparently the stack window class "com_runrev_livecode_MCWindow" has no tNSWindowContentViewController assigned to it.
+         --------- create an NSWindowController and attaches it to the Stack Window:
+         -- put ObjC_NSWindowControllerAlloc() into tNSWindowContentViewController
+         -- put ObjC_NSWindowControllerInitWithWindow(tNSWindowContentViewController,tNSWindow) into tNSWindowContentViewController
+         -- log tNSWindowContentViewController
+         -- LogNSObjectClassName(tNSWindowContentViewController)
+         --------------------------------------------------------------------------
+         --ObjC_NSWindowSetTitleVisibility(tNSWindow,NumberToNSNumber(1)) --- 1 = TitleBar hidden, 0 = TitleBar Visible
+         -- window?.appearance
+         -- ObjC_NSWindowAllowsAutoTabbing(tNSWindow,tNSWindow)
+          -- log rBool
+         -- ObjC_NSWindowToggleTabBar(tNSWindow, tNSWindow)
+          -- ObjC_NSWindowToggleTabOverview(tNSWindow, tNSWindow)
+          -- NSWindowMergeAllWindows(tNSWindow, tNSWindow)
+         -- put ObjC_NSWindowGetBoolValueForKey(tNSWindow,StringToNSString("allowsAutomaticWindowTabbing")) into rBool
+         -- ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("allowsAutomaticWindowTabbing"))
 		end unsafe
 	end if
 end handler
