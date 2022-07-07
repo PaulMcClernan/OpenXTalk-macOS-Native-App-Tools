@@ -25,55 +25,53 @@ public foreign type CGSize binds to "MCAggregateTypeInfo:qq"
 public foreign type NSRect binds to "MCAggregateTypeInfo:qqqq"
 public foreign type CGImageRef binds to "MCAggregateTypeInfo:r"
 public foreign type CGPoint binds to "MCAggregateTypeInfo:qq"
--- private foreign handler NSRangeMakeRange( in pStart as CUint, in pLegth as CUint)) returns ObjcId binds to "c:NSMakeRange"
+-- private foreign handler objC_NSRangeMakeRange( in pStart as CUint, in pLegth as CUint)) returns ObjcId binds to "c:NSMakeRange"
 -- NSMakeRange(0,100)
 public foreign type NSRange binds to "MCAggregateTypeInfo:ii"
-
-
 
 private variable sMyWindow as optional ObjcObject
 private variable sMyWindowController as optional ObjcObject
 
 --------------------- foreign handlers -------------------------------
 
-public foreign handler ObjC_NSArrayAlloc() returns ObjcRetainedId binds to "objc:NSArray.+alloc"
-public foreign handler ObjC_NSArrayComponentsJoinedByString(in pObj as ObjcId, in pSeperator as ObjcId) returns ObjcId binds to "objc:NSArray.-componentsJoinedByString:"
+public foreign handler objC_NSArrayAlloc() returns ObjcRetainedId binds to "objc:NSArray.+alloc"
+public foreign handler objC_NSArrayComponentsJoinedByString(in pObj as ObjcId, in pSeperator as ObjcId) returns ObjcId binds to "objc:NSArray.-componentsJoinedByString:"
 
-private foreign handler NSApplicationSharedApplication() returns ObjcId binds to "objc:NSApplication.+sharedApplication"
-private foreign handler NSApplicationRequestUserAttention(in sharedApplication as ObjcId, in requestType as CLong) returns CLong binds to "objc:NSApplication.-requestUserAttention:"
-private foreign handler NSApplicationMiniaturizeAll( in sharedApplication as optional ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
-private foreign handler NSApplicationHide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-hide:"
-private foreign handler NSApplicationUnhide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-unhide:"
-private foreign handler NSApplicationWindowWithWindowNumber(in pSharedApplication as ObjcId, in pWindowNumber as CLong) returns ObjcId binds to "objc:NSApplication.-windowWithWindowNumber:"
-private foreign handler NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcId binds to "objc:NSApplication.-dockTile"
-private foreign handler NSApplicationSetAppearance(in pNSWindow as ObjcId, in pAppearanceNameNSStr as ObjcId) returns nothing binds to "objc:NSApplication.-setAppearance:"
+private foreign handler objC_NSApplicationSharedApplication() returns ObjcId binds to "objc:NSApplication.+sharedApplication"
+private foreign handler objC_NSApplicationRequestUserAttention(in sharedApplication as ObjcId, in requestType as CLong) returns CLong binds to "objc:NSApplication.-requestUserAttention:"
+private foreign handler objC_NSApplicationMiniaturizeAll( in sharedApplication as optional ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-miniaturizeAll:"
+private foreign handler objC_NSApplicationHide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-hide:"
+private foreign handler objC_NSApplicationUnhide ( in sharedApplication as ObjcId, in pSenderID as optional any) returns nothing binds to "objc:NSApplication.-unhide:"
+private foreign handler objC_NSApplicationWindowWithWindowNumber(in pSharedApplication as ObjcId, in pWindowNumber as CLong) returns ObjcId binds to "objc:NSApplication.-windowWithWindowNumber:"
+private foreign handler objC_NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcId binds to "objc:NSApplication.-dockTile"
+private foreign handler objC_NSApplicationSetAppearance(in pNSWindow as ObjcId, in pAppearanceNameNSStr as ObjcId) returns nothing binds to "objc:NSApplication.-setAppearance:"
 
-private foreign handler NSDockTileSetBadgeLabelProp(in pNSDockTile as ObjcId, in pNSString as ObjcId, in pSelectorNSString as ObjcId ) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
-private foreign handler NSDockTileSetShowAppBadge(in pNSDockTile as ObjcId, in pValue as cBool, in pSelectorNSString as ObjcId) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
-private foreign handler NSDockTileDisplay(in pNSDockTile as ObjcId) returns nothing binds to "objc:NSDockTile.-display"
+private foreign handler objC_NSDockTileSetBadgeLabelProp(in pNSDockTile as ObjcId, in pNSString as ObjcId, in pSelectorNSString as ObjcId ) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
+private foreign handler objC_NSDockTileSetShowAppBadge(in pNSDockTile as ObjcId, in pValue as cBool, in pSelectorNSString as ObjcId) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
+private foreign handler objC_NSDockTileDisplay(in pNSDockTile as ObjcId) returns nothing binds to "objc:NSDockTile.-display"
 
-private foreign handler NSUserNotificationCenterDefaultUserNotificationCenter() returns ObjcId binds to "objc:NSUserNotificationCenter.+defaultUserNotificationCenter"
-private foreign handler NSUserNotificationAlloc() returns ObjcRetainedId binds to "objc:NSUserNotification.+alloc"
-private foreign handler NSUserNotificationInit(in anInstance as ObjcId) returns ObjcId binds to "objc:NSUserNotification.-init"
-private foreign handler NSUserNotificationSetProperty(in Obj as ObjcId, in pValue as ObjcId, in pProp as ObjcId) returns nothing binds to "objc:NSUserNotification.-setValue:forKey:"
-private foreign handler NSUserNotificationCenterDeliverNotification(in defaultUserNotificationCenter as ObjcId, in aNotificationInstance as ObjcId) returns nothing binds to "objc:NSUserNotificationCenter.-deliverNotification:"
+private foreign handler objC_NSUserNotificationCenterDefaultUserNotificationCenter() returns ObjcId binds to "objc:NSUserNotificationCenter.+defaultUserNotificationCenter"
+private foreign handler objC_NSUserNotificationAlloc() returns ObjcRetainedId binds to "objc:NSUserNotification.+alloc"
+private foreign handler objC_NSUserNotificationInit(in anInstance as ObjcId) returns ObjcId binds to "objc:NSUserNotification.-init"
+private foreign handler objC_NSUserNotificationSetProperty(in Obj as ObjcId, in pValue as ObjcId, in pProp as ObjcId) returns nothing binds to "objc:NSUserNotification.-setValue:forKey:"
+private foreign handler objC_NSUserNotificationCenterDeliverNotification(in defaultUserNotificationCenter as ObjcId, in aNotificationInstance as ObjcId) returns nothing binds to "objc:NSUserNotificationCenter.-deliverNotification:"
 
-private foreign handler NSDistributedNotificationCenterDefaultCenter() returns ObjcId binds to "objc:NSDistributedNotificationCenter.+defaultCenter"
-private foreign handler NSDistributedNotificationCenterPostNotificationNameObject(in defaultCenter as ObjcId, in notificationName as ObjcId, in notificationObject as ObjcId) returns nothing binds to "objc:NSDistributedNotificationCenter.-postNotificationName:object:"
+private foreign handler objC_NSDistributedNotificationCenterDefaultCenter() returns ObjcId binds to "objc:NSDistributedNotificationCenter.+defaultCenter"
+private foreign handler objC_NSDistributedNotificationCenterPostNotificationNameObject(in defaultCenter as ObjcId, in notificationName as ObjcId, in notificationObject as ObjcId) returns nothing binds to "objc:NSDistributedNotificationCenter.-postNotificationName:object:"
 
-private foreign handler NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
---private foreign handler NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
+private foreign handler objC_NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
+--private foreign handler objC_NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
 
-private foreign handler NSFileManagerSharedManager() returns ObjcId binds to "objc:NSFileManager.+defaultManager"
-private foreign handler NSFileManagerCurrentUserHomeURL(in pNSSharedFilemanager as ObjcId) returns ObjcId binds to "objc:NSFileManager.homeDirectoryForCurrentUser"
-private foreign handler NSFileManagerAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns optional ObjcId binds to "objc:NSFileManager.-attributesOfItemAtPath:error:"
-private foreign handler NSFileManagerSetAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pAtributesNSDict as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns cBool binds to "objc:NSFileManager.-setAttributes:ofItemAtPath:error:"
+private foreign handler objC_NSFileManagerSharedManager() returns ObjcId binds to "objc:NSFileManager.+defaultManager"
+private foreign handler objC_NSFileManagerCurrentUserHomeURL(in pNSSharedFilemanager as ObjcId) returns ObjcId binds to "objc:NSFileManager.homeDirectoryForCurrentUser"
+private foreign handler objC_NSFileManagerAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns optional ObjcId binds to "objc:NSFileManager.-attributesOfItemAtPath:error:"
+private foreign handler objC_NSFileManagerSetAttributesOfItemAtPath(in pNSSharedFilemanager as ObjcId, in pAtributesNSDict as ObjcId, in pPathNSString as ObjcId, inout pNSError as optional ObjcId ) returns cBool binds to "objc:NSFileManager.-setAttributes:ofItemAtPath:error:"
 
-private foreign handler NSAppleScriptAlloc() returns ObjcRetainedId binds to "objc:NSAppleScript.+alloc"
-private foreign handler NSAppleScriptInitWithSource( in pNSAppleScript as ObjcId, in pNSStringAppleScript as ObjcId) returns ObjcId binds to "objc:NSAppleScript.-initWithSource:"
-private foreign handler NSAppleScriptCompileAndReturnError( in pNSAppleScript as ObjcId, inout rErrorNSDict as optional ObjcId) returns CBool binds to "objc:NSAppleScript.-compileAndReturnError:"
-private foreign handler NSAppleScriptExecuteAndReturnError( in pNSAppleScript as ObjcId, inout rErrorNSDict as optional ObjcId) returns CBool binds to "objc:NSAppleScript.-executeAndReturnError:"
-private foreign handler NSAppleScriptGetRichTextSource( in pNSAppleScript as ObjcId) returns optional ObjcId binds to "objc:NSAppleScript.richTextSource"
+private foreign handler objC_NSAppleScriptAlloc() returns ObjcRetainedId binds to "objc:NSAppleScript.+alloc"
+private foreign handler objC_NSAppleScriptInitWithSource( in pNSAppleScript as ObjcId, in pNSStringAppleScript as ObjcId) returns ObjcId binds to "objc:NSAppleScript.-initWithSource:"
+private foreign handler objC_NSAppleScriptCompileAndReturnError( in pNSAppleScript as ObjcId, inout rErrorNSDict as optional ObjcId) returns CBool binds to "objc:NSAppleScript.-compileAndReturnError:"
+private foreign handler objC_NSAppleScriptExecuteAndReturnError( in pNSAppleScript as ObjcId, inout rErrorNSDict as optional ObjcId) returns CBool binds to "objc:NSAppleScript.-executeAndReturnError:"
+private foreign handler objC_NSAppleScriptGetRichTextSource( in pNSAppleScript as ObjcId) returns optional ObjcId binds to "objc:NSAppleScript.richTextSource"
 
 private foreign handler ObjC_NSWorkspaceSharedWorkspace() returns ObjcId binds to "objc:NSWorkspace.+sharedWorkspace"
 private foreign handler ObjC_NSWorkspaceSelectFile(in pSharedWorkspace as ObjcId, in pFilename as ObjcId, in pRootedAtPath as ObjcId) returns CBool binds to "objc:NSWorkspace.-selectFile:inFileViewerRootedAtPath:"
@@ -113,8 +111,8 @@ private foreign handler objC_NSMutableArrayInitWithNSArray(in pNSMutableArray as
 
 private foreign handler c_CFErrorCopyDescription(in pCFErrorRef as ObjcId) returns ObjcId binds to "c:CFErrorCopyDescription"
 
-private foreign handler NSAttributedStringLength(in pNSAttributedString as ObjcId) returns CUint binds to "objc:NSAttributedString.length"
-private foreign handler NSAttributedStringString(in pNSAttributedString as ObjcId) returns ObjcId binds to "objc:NSAttributedString.string"
+private foreign handler objC_NSAttributedStringLength(in pNSAttributedString as ObjcId) returns CUint binds to "objc:NSAttributedString.length"
+private foreign handler objC_NSAttributedStringString(in pNSAttributedString as ObjcId) returns ObjcId binds to "objc:NSAttributedString.string"
 
 private foreign handler ObjC_NSWindowAlloc() returns ObjcRetainedId binds to "objc:NSWindow.+alloc"
 private foreign handler ObjC_NSWindowInitWithRectStyleBackingDefer(in pObj as ObjcRetainedId, in pRect as NSRect, in pStyleMask as CLong, in pBackingStoreType as CLong, in pDefer as CBool) \
@@ -137,9 +135,9 @@ private foreign handler ObjC_NSWindowSetStyleMask(in pNSWindow as ObjcId, in pOp
 private foreign handler ObjC_NSWindowGetFrameRect(in pNSWindow as ObjcId) returns NSRect binds to "objc:NSWindow.frame"
 
 private foreign handler ObjC_NSWindowAllowsAutoTabbing(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.allowsAutomaticWindowTabbing"
--- private foreign handler NSAppMergeAllWindows( in pSenderNSObj as ObjcId ) returns nothing binds to "objc:.-mergeAllWindows"
-private foreign handler NSWindowMergeAllWindows( in pNSWindow as ObjcId, in pSenderID as ObjcId ) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
--- private foreign handler NSWindowMergeAllWindows(in pNSWindow as optional ObjcId) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
+-- private foreign handler objC_NSAppMergeAllWindows( in pSenderNSObj as ObjcId ) returns nothing binds to "objc:.-mergeAllWindows"
+private foreign handler objC_NSWindowMergeAllWindows( in pNSWindow as ObjcId, in pSenderID as ObjcId ) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
+-- private foreign handler objC_NSWindowMergeAllWindows(in pNSWindow as optional ObjcId) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
 
 private foreign handler ObjC_NSWindowToggleTabBar(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-toggleTabBar:"
 private foreign handler ObjC_NSWindowToggleTabOverview(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-toggleTabOverview:"
@@ -177,8 +175,6 @@ private foreign handler ObjC_NSViewControllerAlloc() returns ObjcRetainedId bind
 private foreign handler ObjC_NSViewControllerDealloc(in pNSViewController as ObjcId) returns nothing binds to "objc:NSViewController.-dealloc"
 
 
-
-
 --------------------- Private handlers
 
 private handler LogNSObjectClassName(in tNSObj as optional ObjcId)
@@ -196,12 +192,12 @@ private handler LogNSObjectClassName(in tNSObj as optional ObjcId)
    end if
 end handler
 
-private handler _NSWindowFromWindowID(in windowID as Integer) returns ObjcId
-	variable NSSharedApplication as ObjcId
+private handler _NSWindowFromWindowID(in tWindowID as Integer) returns ObjcId
+	variable tNSSharedApplication as ObjcId
 	variable tNSWindow as ObjcId
 	unsafe
-	put NSApplicationSharedApplication() into NSSharedApplication
-	put NSApplicationWindowWithWindowNumber(NSSharedApplication, windowID) into tNSWindow
+	put objC_NSApplicationSharedApplication() into tNSSharedApplication
+	put objC_NSApplicationWindowWithWindowNumber(tNSSharedApplication, tWindowID) into tNSWindow
 	end unsafe
 	return tNSWindow
 end handler
@@ -317,25 +313,25 @@ public handler appleScriptObjTests(in pAppleScript as String) returns any
 
    variable tAttributesArray as optional Array
 	unsafe
-   	put NSAppleScriptAlloc() into tNSAppleScriptObj
+   	put objC_NSAppleScriptAlloc() into tNSAppleScriptObj
       -- put ArrayToNSDictionary(the empty array) into rErrorDictionary
       -- log tSharedFileManager`
       -- LogNSObjectClassName(tNSAppleScriptObj)
       -- put objC_NSErrorAlloc() into rNSError
       -- LogNSObjectClassName(rNSError)
       --put nothing into rErrorDictionary
-   	put NSAppleScriptInitWithSource( tNSAppleScriptObj, StringToNSString(pAppleScript)) into tNSAppleScriptObj
+   	put objC_NSAppleScriptInitWithSource( tNSAppleScriptObj, StringToNSString(pAppleScript)) into tNSAppleScriptObj
       LogNSObjectClassName(tNSAppleScriptObj)
-      put NSAppleScriptCompileAndReturnError(tNSAppleScriptObj , rErrorDictionary ) into tSuccess
-      -- put NSAppleScriptExecuteAndReturnError(tNSAppleScriptObj , rErrorDictionary ) into tSuccess
+      put objC_NSAppleScriptCompileAndReturnError(tNSAppleScriptObj , rErrorDictionary ) into tSuccess
+      -- put objC_NSAppleScriptExecuteAndReturnError(tNSAppleScriptObj , rErrorDictionary ) into tSuccess
       if tSuccess then
          -- put 0 into tCUInt
          -- put tCUInt into element 1 of tNSRange --- start
-         put NSAppleScriptGetRichTextSource(tNSAppleScriptObj) into tNSURLAtribString
+         put objC_NSAppleScriptGetRichTextSource(tNSAppleScriptObj) into tNSURLAtribString
          LogNSObjectClassName(tNSURLAtribString)
-         put NSAttributedStringLength(tNSURLAtribString) into tCUInt
+         put objC_NSAttributedStringLength(tNSURLAtribString) into tCUInt
          log tCUInt
-         put NSAttributedStringString(tNSURLAtribString) into tNSString
+         put objC_NSAttributedStringString(tNSURLAtribString) into tNSString
          put StringFromNSString(tNSString) into tString
          log tString
          -- put StringFromNSString( tNSURLAtribString ) into tString
@@ -376,10 +372,10 @@ public handler GetrCurrentUserHome() returns any
    variable tNSURLString as optional ObjcObject
    variable tNSString as optional ObjcObject
 	unsafe
-   	put NSFileManagerSharedManager() into tSharedFileManager
+   	put objC_NSFileManagerSharedManager() into tSharedFileManager
       -- log tSharedFileManager
       -- LogNSObjectClassName(tSharedFileManager)
-   	put NSFileManagerCurrentUserHomeURL(tSharedFileManager) into tUserHomeDir
+   	put objC_NSFileManagerCurrentUserHomeURL(tSharedFileManager) into tUserHomeDir
       -- log tUserHomeDir
       -- LogNSObjectClassName(tUserHomeDir) --- should log NSURL
       put objC_NSURLGetAbsoluteString(tUserHomeDir) into tNSURLString
@@ -390,6 +386,41 @@ public handler GetrCurrentUserHome() returns any
    -- return ""
 end handler
 
+/**
+Summary: Reveals a file or folder in the Finder.
+
+Parameters:
+pFilePath: Path to the file or folder to reveal.
+
+Returns: Boolean
+*/
+public handler RevealFileInFinder(in pFilePath as String) returns Boolean
+   variable sharedWorkspace as ObjcObject
+   variable tStatus as Boolean
+   unsafe
+      put ObjC_NSWorkspaceSharedWorkspace() into sharedWorkspace
+      put ObjC_NSWorkspaceSelectFile(sharedWorkspace, StringToNSString(pFilePath), StringToNSString("")) into tStatus
+   end unsafe
+   return tStatus
+end handler
+
+/**
+Summary: retrieves Mac HFS Creator and Type Codes Of File.
+
+Parameters:
+pPathToFile: Path to the file to examine.
+
+Returns: A two-line list. Line 1 is creator code. Line 2 is the file type code, or empty property is not set.
+
+Description:
+Retrieves the Mac HFS (Hierarchial File System) creator and type codes of a file.
+Returns empty if the file does not have HFS type codes set, otherwise a two-line
+list will be returned. Line 1 is creator code. Line 2 is the file type code.
+NOTE: Mac HFS Type and Creator Codes are legacy macOS classic file system attributes
+which have long been marked as 'deprecatred' by Apple, however since this potentially
+effects many legacy files, Apple has included HFS Type and Creator in the
+contemporary APFS file system.
+*/
 public handler GetHFSCreatorTypeCodesOfFile(in pPathToFile as String) returns any
 	variable tSharedFileManager as ObjcObject
 	variable rNSError as optional ObjcObject
@@ -399,13 +430,13 @@ public handler GetHFSCreatorTypeCodesOfFile(in pPathToFile as String) returns an
    variable tNSString as optional ObjcObject
    variable tAttributesArray as optional Array
 	unsafe
-   	put NSFileManagerSharedManager() into tSharedFileManager
+   	put objC_NSFileManagerSharedManager() into tSharedFileManager
       -- log tSharedFileManager
       -- LogNSObjectClassName(tSharedFileManager)
       put objC_NSErrorAlloc() into rNSError
       -- LogNSObjectClassName(rNSError)
       put nothing into rNSError
-   	put NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
+   	put objC_NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
       LogNSObjectClassName(rNSError)
       LogNSObjectClassName(tAttributesNSDict) --- should log 'NSDictionary'?
       put ArrayFromNSDictionary(tAttributesNSDict) into tAttributesArray
@@ -421,6 +452,24 @@ public handler GetHFSCreatorTypeCodesOfFile(in pPathToFile as String) returns an
    -- return ""
 end handler
 
+/**
+Summary: Sets the Mac HFS Creator Code of a file.
+
+Parameters:
+pFilePath: Path to the file to examine.
+pFourCharOSType: An 'OSType' four character creator code, such as 'WILD' or 'OXTk'
+
+Returns: true on success, otherwise false
+
+Description:
+Sets the Mac HFS Creator Code of a file. A creator code is a four-character
+'OSType' code, such as 'WILD' or 'OXTk, used to associate an application with
+a file for legacy classic macOS files.
+NOTE: Mac HFS Type and Creator Codes are legacy macOS classic file system attributes
+which have long been marked as 'deprecatred' by Apple, however since this potentially
+effects many legacy files, Apple has included HFS Type and Creator in the
+contemporary APFS file system.
+*/
 public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOSType as String ) returns any
 	variable tSharedFileManager as ObjcObject
 	variable rNSError as optional ObjcObject
@@ -432,13 +481,13 @@ public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOS
    variable tStatus as Boolean
    variable tOSType as UInt32
 	unsafe
-   	put NSFileManagerSharedManager() into tSharedFileManager
+   	put objC_NSFileManagerSharedManager() into tSharedFileManager
       -- log tSharedFileManager
       -- LogNSObjectClassName(tSharedFileManager)
       put objC_NSErrorAlloc() into rNSError
       -- LogNSObjectClassnName(rNSError)
       put nothing into rNSError
-   	put NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
+   	put objC_NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
       LogNSObjectClassName(rNSError) --should log 'NSError' or 'No Object' if no error
       LogNSObjectClassName(tAttributesNSDict) --- should log 'NSFileAttributes' which is an NSDictionary type
       put ArrayFromNSDictionary(tAttributesNSDict) into tAttributesArray
@@ -446,7 +495,7 @@ public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOS
       put getIntegerFromFourCharCodeBigEndian(char 1 to 4 of pFourCharOSType) into tAttributesArray["NSFileHFSCreatorCode"]
       log tAttributesArray
       put ArrayToNSDictionary(tAttributesArray) into tAttributesNSDict
-      put NSFileManagerSetAttributesOfItemAtPath( tSharedFileManager, tAttributesNSDict,StringToNSString(pPathToFile), rNSError) into tStatus
+      put objC_NSFileManagerSetAttributesOfItemAtPath( tSharedFileManager, tAttributesNSDict,StringToNSString(pPathToFile), rNSError) into tStatus
       -- put objC_NSURLGetAbsoluteString(tUserHomeDir) into tNSURLString
       -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
        -- return StringFromNSString(tNSPath)
@@ -454,7 +503,55 @@ public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOS
       -- put objC_NSURLGetPath(tUserHomeDir) into tNSPath
       -- return ( StringFromNSString(tNSURLString) & "\n" & StringFromNSString(tNSPath) )
 	end unsafe
-   return ""
+   return tStatus
+end handler
+
+/**
+Summary: Sets the Mac HFS Type Code of a file.
+
+Parameters:
+pFilePath: Path to the file to examine.
+pFourCharOSType: An 'OSType' four character type code, such as STAK or JFIF
+
+Returns: true on success, otherwise false
+
+Description:
+Sets the Mac HFS Type Code of a file. A type code is a four-character
+OSType code, such as MIDI or TIFF, used to associate a file type with a file for
+legacy classic macOS files, which did not use filename extensions to detirmine a files type.
+NOTE: Mac HFS Type and Creator Codes are legacy macOS classic file system attributes
+which have long been marked as 'deprecatred' by Apple, however since this potentially
+effects many legacy files, Apple has included HFS Type and Creator in the
+contemporary APFS file system.
+*/
+public handler SetHFSTypeCodeOfFile( in pPathToFile as String, in pFourCharOSType as String ) returns any
+	variable tSharedFileManager as ObjcObject
+	variable rNSError as optional ObjcObject
+	variable tAttributesNSDict as optional ObjcObject
+	variable tNSPath as optional ObjcObject
+   variable tNSURLString as optional ObjcObject
+   variable tNSString as optional ObjcObject
+   variable tAttributesArray as optional Array
+   variable tStatus as Boolean
+   variable tOSType as UInt32
+	unsafe
+   	put objC_NSFileManagerSharedManager() into tSharedFileManager
+      -- log tSharedFileManager
+      -- LogNSObjectClassName(tSharedFileManager)
+      put objC_NSErrorAlloc() into rNSError
+      -- LogNSObjectClassnName(rNSError)
+      put nothing into rNSError
+   	put objC_NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
+      -- LogNSObjectClassName(rNSError) --should log 'NSError' or 'No Object' if no error
+      -- LogNSObjectClassName(tAttributesNSDict) --- should log 'NSFileAttributes' which is an NSDictionary type
+      put ArrayFromNSDictionary(tAttributesNSDict) into tAttributesArray
+
+      put getIntegerFromFourCharCodeBigEndian(char 1 to 4 of pFourCharOSType) into tAttributesArray["NSFileHFSTypeCode"]
+      log tAttributesArray
+      put ArrayToNSDictionary(tAttributesArray) into tAttributesNSDict
+      put objC_NSFileManagerSetAttributesOfItemAtPath( tSharedFileManager, tAttributesNSDict,StringToNSString(pPathToFile), rNSError) into tStatus
+	end unsafe
+   return tStatus
 end handler
 
 /**
@@ -475,11 +572,11 @@ public handler SetDockTileBadge(in badgeText as String) returns nothing
 	variable tNSDockTile as ObjcId
 	if (the operating system is "mac") then
 		unsafe
-		put NSApplicationSharedApplication() into sharedApplication
-  		put NSApplicationGetNSDockTile(sharedApplication) into tNSDockTile
-		NSDockTileSetShowAppBadge(tNSDockTile, true, StringToNSString("showsApplicationBadge"))
-		NSDockTileSetBadgeLabelProp(tNSDockTile,StringToNSString(badgeText),StringToNSString("badgeLabel"))
-		NSDockTileDisplay(tNSDockTile)
+		put objC_NSApplicationSharedApplication() into sharedApplication
+  		put objC_NSApplicationGetNSDockTile(sharedApplication) into tNSDockTile
+		objC_NSDockTileSetShowAppBadge(tNSDockTile, true, StringToNSString("showsApplicationBadge"))
+		objC_NSDockTileSetBadgeLabelProp(tNSDockTile,StringToNSString(badgeText),StringToNSString("badgeLabel"))
+		objC_NSDockTileDisplay(tNSDockTile)
 		end unsafe
 	end if
 end handler
@@ -510,12 +607,12 @@ public handler RequestUserAttention(in criticalRequest as Boolean) returns nothi
 	if (the operating system is "mac") then
 		unsafe
 			variable sharedApplication as ObjcId
-			put NSApplicationSharedApplication() into sharedApplication
+			put objC_NSApplicationSharedApplication() into sharedApplication
 			variable tResults as CLong
 			if (criticalRequest) then
-				put NSApplicationRequestUserAttention(sharedApplication, 0) into tResults
+				put objC_NSApplicationRequestUserAttention(sharedApplication, 0) into tResults
 			else
-				put NSApplicationRequestUserAttention(sharedApplication, 10) into tResults
+				put objC_NSApplicationRequestUserAttention(sharedApplication, 10) into tResults
 			end if
 		end unsafe
 	end if
@@ -525,8 +622,8 @@ public handler DownloadFileFinished(in pathToFile as String) returns nothing
 	if (the operating system is "mac") then
 		variable defaultCenter as ObjcId
 		unsafe
-			put NSDistributedNotificationCenterDefaultCenter() into defaultCenter
-			NSDistributedNotificationCenterPostNotificationNameObject(defaultCenter, StringToNSString("com.apple.DownloadFileFinished"), StringToNSString(pathToFile))
+			put objC_NSDistributedNotificationCenterDefaultCenter() into defaultCenter
+			objC_NSDistributedNotificationCenterPostNotificationNameObject(defaultCenter, StringToNSString("com.apple.DownloadFileFinished"), StringToNSString(pathToFile))
 		end unsafe
 	end if
 end handler
@@ -697,7 +794,22 @@ public handler setWindowToDarkMode(in pWindowID as Integer) returns nothing
 end handler
 
 
+/**
+Get the real rect of a stack's window including decorations and titlebar.
 
+Example:
+put getNSWindowFrameRect( the windowID of this stack ) into message
+
+Parameters:
+pWindowID (integer): retrieved from a stack's windowID property.
+
+Description:
+Gets the actual rect of a stack's window on macOS, including the windows decorations,
+titlebar, etc. This will likely be a different in height than a stacks rect property
+( 19 pixel height differnece for a palette window type for example).
+NOTE: macOS system use bottom/left start point and height/width size to define a
+windows rect.
+*/
 public handler getNSWindowFrameRect(in pWindowID as Integer) returns String
 	if (the operating system is "mac") then
 		variable tNSString as optional ObjcId
@@ -778,9 +890,9 @@ public handler setAppToDarkMode() returns nothing
       -- variable tResults as CLong
 		unsafe
          ------------------------------------------------------------------ Do The Application Wide DarkMode ------------------------------------------------------
-         put NSApplicationSharedApplication() into tSharedApplication
+         put objC_NSApplicationSharedApplication() into tSharedApplication
          put ObjC_NSAppearanceNewAppearanceNamed( StringToNSString("NSAppearanceNameVibrantDark") ) into mNSAppearance
-         NSApplicationSetAppearance(tSharedApplication,mNSAppearance)
+         objC_NSApplicationSetAppearance(tSharedApplication,mNSAppearance)
 		end unsafe
 	end if
 end handler
@@ -799,9 +911,9 @@ public handler setAppToLightMode() returns nothing
       variable tSharedApplication as ObjcId
 		unsafe
          ------------------------------------------------------------------ Do The Application Wide DarkMode ------------------------------------------------------
-         put NSApplicationSharedApplication() into tSharedApplication
+         put objC_NSApplicationSharedApplication() into tSharedApplication
          put ObjC_NSAppearanceNewAppearanceNamed( StringToNSString("NSAppearanceNameVibrantLight") ) into mNSAppearance
-         NSApplicationSetAppearance(tSharedApplication,mNSAppearance)
+         objC_NSApplicationSetAppearance(tSharedApplication,mNSAppearance)
 		end unsafe
 	end if
 end handler
@@ -837,28 +949,28 @@ public handler PostUserNotification(in postTitle as String, in subTitle as optio
 	if (the operating system is "mac") then
 		unsafe
 			variable defaultUserNotificationCenter as ObjcId
-			put NSUserNotificationCenterDefaultUserNotificationCenter() into defaultUserNotificationCenter
+			put objC_NSUserNotificationCenterDefaultUserNotificationCenter() into defaultUserNotificationCenter
 
 			variable aNSUserNotification as ObjcObject
-			put NSUserNotificationAlloc() into aNSUserNotification
-			put NSUserNotificationInit(aNSUserNotification) into aNSUserNotification
+			put objC_NSUserNotificationAlloc() into aNSUserNotification
+			put objC_NSUserNotificationInit(aNSUserNotification) into aNSUserNotification
 
-			NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(postTitle), StringToNSString("title"))
+			objC_NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(postTitle), StringToNSString("title"))
 			if (subTitle is not nothing) then
-				NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(subTitle), StringToNSString("subtitle"))
+				objC_NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(subTitle), StringToNSString("subtitle"))
 			end if
 			if (informativeText is not nothing) then
-				NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(informativeText), StringToNSString("informativeText"))
+				objC_NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(informativeText), StringToNSString("informativeText"))
 			end if
 			if (postIdentifier is not nothing) then
-				NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(postIdentifier), StringToNSString("identifier"))
+				objC_NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(postIdentifier), StringToNSString("identifier"))
 			end if
 			if (soundName is empty) then
 				-- don't add soundName
 			else if (soundName is not nothing) then
-			NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(soundName), StringToNSString("soundName"))
+			objC_NSUserNotificationSetProperty(aNSUserNotification, StringToNSString(soundName), StringToNSString("soundName"))
 			end if
-			NSUserNotificationCenterDeliverNotification(defaultUserNotificationCenter, aNSUserNotification)
+			objC_NSUserNotificationCenterDeliverNotification(defaultUserNotificationCenter, aNSUserNotification)
 		end unsafe
 	end if
 end handler
@@ -879,8 +991,8 @@ public handler MiniaturizeAll() returns nothing
 			variable sharedApplication as ObjcId
 			-- variable tResults as CLong
 		unsafe
-			put NSApplicationSharedApplication() into sharedApplication
-			NSApplicationMiniaturizeAll(sharedApplication,nothing)
+			put objC_NSApplicationSharedApplication() into sharedApplication
+			objC_NSApplicationMiniaturizeAll(sharedApplication,nothing)
 		end unsafe
 	end if
 end handler
@@ -930,8 +1042,8 @@ public handler AppHide() returns nothing
 	if (the operating system is "mac") then
 		unsafe
 			variable sharedApplication as ObjcId
-			put NSApplicationSharedApplication() into sharedApplication
-			NSApplicationHide(sharedApplication, nothing)
+			put objC_NSApplicationSharedApplication() into sharedApplication
+			objC_NSApplicationHide(sharedApplication, nothing)
 		end unsafe
 	end if
 end handler
@@ -983,14 +1095,14 @@ public handler MergeAllWindows( in pWindowID as Integer ) returns nothing
          -- put objC_NSObjectGetValueForKey( NSObj,StringToNSString("selector")) into rType
 
       -- return NumberFromNSNumber(rGain)
-			-- put NSApplicationSharedApplication() into sharedApplication
-         -- NSApplicationMergeAllWindows( sharedApplication )
+			-- put objC_NSApplicationSharedApplication() into sharedApplication
+         -- objC_NSApplicationMergeAllWindows( sharedApplication )
          -- put objC_NSObjectGetValueForKey( sharedApplication,StringToNSString("allowsAutomaticWindowTabbing")) into rBool
          -- log rBool
-		 --   NSObjMergeAllWindows(sharedApplication)
+		 --   objC_NSObjMergeAllWindows(sharedApplication)
 			put _NSWindowFromWindowID(pWindowID) into tNSWindow
          -- log tNSWindow
-         -- NSWindowMergeAllWindows( pWindowID )
+         -- objC_NSWindowMergeAllWindows( pWindowID )
          ------------------------------------------------------------------- It seems thst LiveCode stack windows on macOS are  customized class of NSWindow
          -- LogNSObjectClassName(tNSWindow) -- logs the class name as "com_runrev_livecode_MCWindow"
          -- put ObjC_NSWindowGetWindowController(tNSWindow) into tNSWindowController
@@ -1009,7 +1121,7 @@ public handler MergeAllWindows( in pWindowID as Integer ) returns nothing
           -- log rBool
          -- ObjC_NSWindowToggleTabBar(tNSWindow, tNSWindow)
           -- ObjC_NSWindowToggleTabOverview(tNSWindow, tNSWindow)
-          -- NSWindowMergeAllWindows(tNSWindow, tNSWindow)
+          -- objC_NSWindowMergeAllWindows(tNSWindow, tNSWindow)
          -- put ObjC_NSWindowGetBoolValueForKey(tNSWindow,StringToNSString("allowsAutomaticWindowTabbing")) into rBool
          -- ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("allowsAutomaticWindowTabbing"))
 		end unsafe
@@ -1033,8 +1145,8 @@ public handler AppUnhide() returns nothing
 			variable sharedApplication as ObjcId
 			-- variable tNSWindow as ObjcId
 			-- put _NSWindowFromWindowID(windowID) into tNSWindow
-			put NSApplicationSharedApplication() into sharedApplication
-			NSApplicationUnhide(sharedApplication, sharedApplication)
+			put objC_NSApplicationSharedApplication() into sharedApplication
+			objC_NSApplicationUnhide(sharedApplication, sharedApplication)
 		end unsafe
 	end if
 end handler
