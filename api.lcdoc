@@ -15,42 +15,109 @@ version: 1.0.2
 author: Paul McClernan
 
 
-Name: FullScreenAllowed
+Name: setAppToLightMode
 
 Type: handler
 
-Syntax: FullScreenAllowed(<windowID>,<isAllowed>)
+Syntax: setAppToLightMode()
 
-Summary: Sets the mac native fullscreen attribute for a windowID passed to it.
+Summary: Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
 
-Example: FullScreenAllowed the windowID of this stack, TRUE
+Example: setAppToDarkMode the windowID of this stack
+
+Description: This sets an Apps appearance to Light Mode, with all app windows inheriting the dark appearance
+
+
+
+
+Name: setWindowToDarkMode
+
+Type: handler
+
+Syntax: setWindowToDarkMode(<pWindowID>)
+
+Summary: Assign the macOS native "dark mode" window style to a stack's window
+
+Example: setWindowToDarkMode the windowID of this stack
 
 Parameters: 
 
 windowID: retrieved from a stack's windowID property.
 
-isAllowed: If true then allow, if false don't allow.
-
-Description:
-This handler will set the mac native Full Screen behaviour on the windowID passed.
-Depending on the OS version, this will either display an icon in the window’s
-top-right corner, or change the maximize button to display double arrows.
+Description: This handler will set the macOS dark appearance of the window passed.
 
 
 
-Name: GetFrontmostApplication
+
+Name: SetHFSCreatorCodeOfFile
 
 Type: handler
 
-Syntax: GetFrontmostApplication(<pReturnType>)
+Syntax: SetHFSCreatorCodeOfFile(<pPathToFile>,<pFourCharOSType>)
 
-Summary: Returns information about the frontmost application.
+Summary: Sets the Mac HFS Creator Code of a file.
 
 Parameters: 
 
-pReturnType: `ProcessID`, `Path`,`BundleID`, empty
+pFilePath: Path to the file to examine.
 
-Returns: Requested return type or a return delimited list
+pFourCharOSType: An 'OSType' four character creator code, such as 'WILD' or 'OXTk'
+
+Returns: true on success, otherwise false
+
+Description:
+Sets the Mac HFS Creator Code of a file. A creator code is a four-character
+'OSType' code, such as 'WILD' or 'OXTk, used to associate an application with
+a file for legacy classic macOS files.
+
+NOTE:
+Mac HFS Type and Creator Codes are legacy macOS classic file system attributes
+which have long been marked as 'deprecatred' by Apple, however since this potentially
+effects many legacy files, Apple has included HFS Type and Creator in the
+contemporary APFS file system.
+
+
+
+Name: SetHFSTypeCodeOfFile
+
+Type: handler
+
+Syntax: SetHFSTypeCodeOfFile(<pPathToFile>,<pFourCharOSType>)
+
+Summary: Sets the Mac HFS Type Code of a file.
+
+Parameters: 
+
+pFilePath: Path to the file to examine.
+
+pFourCharOSType: An 'OSType' four character type code, such as STAK or JFIF
+
+Returns: true on success, otherwise false
+
+Description:
+Sets the Mac HFS Type Code of a file. A type code is a four-character
+OSType code, such as MIDI or TIFF, used to associate a file type with a file for
+legacy classic macOS files, which did not use filename extensions to detirmine a files type.
+
+NOTE:
+Mac HFS Type and Creator Codes are legacy macOS classic file system attributes
+which have long been marked as 'deprecatred' by Apple, however since this potentially
+effects many legacy files, Apple has included HFS Type and Creator in the
+contemporary APFS file system.
+
+
+
+Name: setAppToDarkMode
+
+Type: handler
+
+Syntax: setAppToDarkMode()
+
+Summary: Assign the macOS native "Vibrant Dark" appearance style to all app windows
+
+Example: setAppToDarkMode the windowID of this stack
+
+Description: This sets an Apps appearance to Dark Mode, with all app windows inheriting the dark appearance
 
 
 
@@ -74,36 +141,6 @@ Returns: The mac native Full Screen allowed state of a stack's window.
 Description:
 Geven the windowID of a stack this returns the mac native Full Screen behavior
 state of the stack.
-
-
-
-Name: setAppToLightMode
-
-Type: handler
-
-Syntax: setAppToLightMode()
-
-Summary: Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
-
-Example: setAppToDarkMode the windowID of this stack
-
-Description: This sets an Apps appearance to Light Mode, with all app windows inheriting the dark appearance
-
-
-
-
-Name: setAppToDarkMode
-
-Type: handler
-
-Syntax: setAppToDarkMode()
-
-Summary: Assign the macOS native "Vibrant Dark" appearance style to all app windows
-
-Example: setAppToDarkMode the windowID of this stack
-
-Description: This sets an Apps appearance to Dark Mode, with all app windows inheriting the dark appearance
-
 
 
 
@@ -141,74 +178,26 @@ Library/Audio/Sounds folders, if no match is found a default alert sound is used
 
 
 
-Name: AppHide
+Name: FullScreenAllowed
 
 Type: handler
 
-Syntax: AppHide()
+Syntax: FullScreenAllowed(<windowID>,<isAllowed>)
 
-Summary: Hides the app sending it in the background and activates the next active app.
+Summary: Sets the mac native fullscreen attribute for a windowID passed to it.
 
-Example: AppHide
-
-Description:
-Hides the app, sending it in the background and activates the next active app.
-This is the programatic equivelant to selcting Hide from the app's Dock menu.
-
-
-
-Name: AppUnhide
-
-Type: handler
-
-Syntax: AppUnhide()
-
-Summary: Unhides the app revealing any document windows that were hidden.
-
-Example: AppUnhide
-
-Description:
-Unhides the app revealing any document windows that were hidden, but it does not
-activate the app which remains in the background.
-
-
-
-Name: setWindowToLightMode
-
-Type: handler
-
-Syntax: setWindowToLightMode(<pWindowID>)
-
-Summary: Assign the macOS native "light mode" window style to a stack's window
-
-Example: setWindowToLightMode the windowID of this stack
+Example: FullScreenAllowed the windowID of this stack, TRUE
 
 Parameters: 
 
 windowID: retrieved from a stack's windowID property.
 
-Description: This handler will set the macOS "light" appearance of the window passed.
-
-
-
-
-Name: SetDockTileBadge
-
-Type: handler
-
-Syntax: SetDockTileBadge(<badgeText>)
-
-Summary: Badge the App's Dock Icon with a small string of text.
-
-Example: setDockTileBadge "Hello"
-
-Parameters: 
-
-badgeText: a small string of text to badge the app's dock icon with.
+isAllowed: If true then allow, if false don't allow.
 
 Description:
-Badge the App's Dock Icon with a small string of text. If badgeText string is
-too long it will be automatically truncated to fit.
+This handler will set the mac native Full Screen behaviour on the windowID passed.
+Depending on the OS version, this will either display an icon in the window’s
+top-right corner, or change the maximize button to display double arrows.
 
 
 
@@ -244,22 +233,141 @@ the app is the active foreground app.
 
 
 
-Name: setWindowToDarkMode
+Name: SetDockTileBadge
 
 Type: handler
 
-Syntax: setWindowToDarkMode(<pWindowID>)
+Syntax: SetDockTileBadge(<badgeText>)
 
-Summary: Assign the macOS native "dark mode" window style to a stack's window
+Summary: Badge the App's Dock Icon with a small string of text.
 
-Example: setWindowToDarkMode the windowID of this stack
+Example: setDockTileBadge "Hello"
 
 Parameters: 
 
-windowID: retrieved from a stack's windowID property.
+badgeText: a small string of text to badge the app's dock icon with.
 
-Description: This handler will set the macOS dark appearance of the window passed.
+Description:
+Badge the App's Dock Icon with a small string of text. If badgeText string is
+too long it will be automatically truncated to fit.
 
+
+
+Name: RevealFileInFinder
+
+Type: handler
+
+Syntax: RevealFileInFinder(<pFilePath>)
+
+Summary: Reveals a file or folder in the Finder.
+
+Parameters: 
+
+pFilePath: Path to the file or folder to reveal.
+
+Returns: Boolean
+
+
+
+
+Name: GetFrontmostApplication
+
+Type: handler
+
+Syntax: GetFrontmostApplication(<pReturnType>)
+
+Summary: Returns information about the frontmost application.
+
+Parameters: 
+
+pReturnType: `ProcessID`, `Path`,`BundleID`, empty
+
+Returns: Requested return type or a return delimited list
+
+
+
+
+Name: MiniaturizeAll
+
+Type: handler
+
+Syntax: MiniaturizeAll()
+
+Summary: Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
+
+Example: MiniaturizeAll
+
+Description:
+Minimize all document windows (does not effect on modal dialogs or modeless palette windows).
+This is the programatic equivelant to option-clicking the yellow minimize button on the windowframe
+
+
+
+Name: AppHide
+
+Type: handler
+
+Syntax: AppHide()
+
+Summary: Hides the app sending it in the background and activates the next active app.
+
+Example: AppHide
+
+Description:
+Hides the app, sending it in the background and activates the next active app.
+This is the programatic equivelant to selcting Hide from the app's Dock menu.
+
+
+
+Name: getNSWindowFrameRect
+
+Type: handler
+
+Syntax: getNSWindowFrameRect(<pWindowID>)
+
+Summary: Get the real rect of a stack's window including decorations and titlebar.
+
+Example: put getNSWindowFrameRect( the windowID of this stack ) into message
+
+Parameters: 
+
+pWindowID: retrieved from a stack's windowID property.
+
+Description:
+Gets the actual rect of a stack's window on macOS, including the windows decorations,
+titlebar, etc. This will likely be a different in height than a stacks rect property
+( 19 pixel height differnece for a palette window type for example).
+
+NOTE:
+macOS system use bottom/left start point and height/width size to define a
+windows rect.
+
+
+
+Name: GetHFSCreatorTypeCodesOfFile
+
+Type: handler
+
+Syntax: GetHFSCreatorTypeCodesOfFile(<pPathToFile>)
+
+Summary: retrieves Mac HFS Creator and Type Codes Of File.
+
+Parameters: 
+
+pPathToFile: Path to the file to examine.
+
+Returns: A two-line list. Line 1 is creator code. Line 2 is the file type code, or empty property is not set.
+
+Description:
+Retrieves the Mac HFS (Hierarchial File System) creator and type codes of a file.
+Returns empty if the file does not have HFS type codes set, otherwise a two-line
+list will be returned. Line 1 is creator code. Line 2 is the file type code.
+
+NOTE:
+Mac HFS Type and Creator Codes are legacy macOS classic file system attributes
+which have long been marked as 'deprecatred' by Apple, however since this potentially
+effects many legacy files, Apple has included HFS Type and Creator in the
+contemporary APFS file system.
 
 
 
@@ -283,6 +391,20 @@ The FullScreenAllowed must first be enabled for this to work (system requirement
 
 
 
+Name: GetRunningApplications
+
+Type: handler
+
+Syntax: GetRunningApplications()
+
+Summary: Returns a information about running applications as a line demilited list.
+
+Returns:
+Returns a line delimited list of information about the currently
+running applications as a line demilited list.
+
+
+
 Name: GetrCurrentUserHome
 
 Type: handler
@@ -296,33 +418,38 @@ Returns: Users home directory as a URL string and as a Path string seperated by 
 
 
 
-Name: MiniaturizeAll
+Name: setWindowToLightMode
 
 Type: handler
 
-Syntax: MiniaturizeAll()
+Syntax: setWindowToLightMode(<pWindowID>)
 
-Summary: Minimize all document windows (does not effect on modal dialogs or modeless palette windows)
+Summary: Assign the macOS native "light mode" window style to a stack's window
 
-Example: MiniaturizeAll
+Example: setWindowToLightMode the windowID of this stack
+
+Parameters: 
+
+windowID: retrieved from a stack's windowID property.
+
+Description: This handler will set the macOS "light" appearance of the window passed.
+
+
+
+
+Name: AppUnhide
+
+Type: handler
+
+Syntax: AppUnhide()
+
+Summary: Unhides the app revealing any document windows that were hidden.
+
+Example: AppUnhide
 
 Description:
-Minimize all document windows (does not effect on modal dialogs or modeless palette windows).
-This is the programatic equivelant to option-clicking the yellow minimize button on the windowframe
-
-
-
-Name: GetRunningApplications
-
-Type: handler
-
-Syntax: GetRunningApplications()
-
-Summary: Returns a information about running applications as a line demilited list.
-
-Returns:
-Returns a line delimited list of information about the currently
-running applications as a line demilited list.
+Unhides the app revealing any document windows that were hidden, but it does not
+activate the app which remains in the background.
 
 
 
