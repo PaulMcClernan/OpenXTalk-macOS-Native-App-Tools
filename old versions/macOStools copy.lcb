@@ -34,8 +34,8 @@ private variable sMyWindowController as optional ObjcObject
 
 --------------------- foreign handlers -------------------------------
 
-private foreign handler objC_NSArrayAlloc() returns ObjcRetainedId binds to "objc:NSArray.+alloc"
-private foreign handler objC_NSArrayComponentsJoinedByString(in pObj as ObjcId, in pSeperator as ObjcId) returns ObjcId binds to "objc:NSArray.-componentsJoinedByString:"
+public foreign handler objC_NSArrayAlloc() returns ObjcRetainedId binds to "objc:NSArray.+alloc"
+public foreign handler objC_NSArrayComponentsJoinedByString(in pObj as ObjcId, in pSeperator as ObjcId) returns ObjcId binds to "objc:NSArray.-componentsJoinedByString:"
 
 private foreign handler objC_NSApplicationSharedApplication() returns ObjcId binds to "objc:NSApplication.+sharedApplication"
 private foreign handler objC_NSApplicationRequestUserAttention(in sharedApplication as ObjcId, in requestType as CLong) returns CLong binds to "objc:NSApplication.-requestUserAttention:"
@@ -45,9 +45,6 @@ private foreign handler objC_NSApplicationUnhide ( in sharedApplication as ObjcI
 private foreign handler objC_NSApplicationWindowWithWindowNumber(in pSharedApplication as ObjcId, in pWindowNumber as CLong) returns ObjcId binds to "objc:NSApplication.-windowWithWindowNumber:"
 private foreign handler objC_NSApplicationGetNSDockTile(in sharedApplication as ObjcId) returns ObjcId binds to "objc:NSApplication.-dockTile"
 private foreign handler objC_NSApplicationSetAppearance(in pNSWindow as ObjcId, in pAppearanceNameNSStr as ObjcId) returns nothing binds to "objc:NSApplication.-setAppearance:"
-
-private foreign handler objC_NSProcessInfoAlloc() returns ObjcRetainedId binds to "objc:NSProcessInfo.+alloc"
-private foreign handler objC_NSProcessInfoInit(in pInstance as ObjcId) returns ObjcId binds to "objc:NSProcessInfo.-init"
 
 private foreign handler objC_NSDockTileSetBadgeLabelProp(in pNSDockTile as ObjcId, in pNSString as ObjcId, in pSelectorNSString as ObjcId ) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
 private foreign handler objC_NSDockTileSetShowAppBadge(in pNSDockTile as ObjcId, in pValue as cBool, in pSelectorNSString as ObjcId) returns nothing binds to "objc:NSDockTile.-setValue:forKey:"
@@ -301,21 +298,6 @@ end handler
 
 --------------------------------------------------------------------------------
 
-public handler macOSVersion() returns String
-	variable tNSProcessInfo as ObjcObject
-   variable tString as String
-   -- unsafe
-   --   put objC_NSProcessInfoAlloc() into tNSProcessInfo
-   --   put objC_NSProcessInfoInit(tNSProcessInfo) into tNSProcessInfo
-   --   LogNSObjectClassName(tNSProcessInfo)
-   -- @property(readonly) NSOperatingSystemVersion operatingSystemVersion;
-   -- operatingSystemVersion & operatingSystemVersionString return the 10.16.x format instead of 11.x
-   -- this shell command is the only thing I could find that returns the correct version
-   -- end unsafe
-   execute script "return shell(\qsw_vers -productVersion\q)"
-   put the result into tString
-   return tString
-end handler
 
 public handler appleScriptObjTests(in pAppleScript as String) returns any
 	variable tNSAppleScriptObj as ObjcObject
@@ -503,7 +485,7 @@ public handler SetHFSCreatorCodeOfFile( in pPathToFile as String, in pFourCharOS
       -- log tSharedFileManager
       -- LogNSObjectClassName(tSharedFileManager)
       put objC_NSErrorAlloc() into rNSError
-      -- LogNSObjectClassName(rNSError)
+      -- LogNSObjectClassnName(rNSError)
       put nothing into rNSError
    	put objC_NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
       LogNSObjectClassName(rNSError) --should log 'NSError' or 'No Object' if no error
@@ -557,7 +539,7 @@ public handler SetHFSTypeCodeOfFile( in pPathToFile as String, in pFourCharOSTyp
       -- log tSharedFileManager
       -- LogNSObjectClassName(tSharedFileManager)
       put objC_NSErrorAlloc() into rNSError
-      -- LogNSObjectClassName(rNSError)
+      -- LogNSObjectClassnName(rNSError)
       put nothing into rNSError
    	put objC_NSFileManagerAttributesOfItemAtPath( tSharedFileManager, StringToNSString(pPathToFile), rNSError) into tAttributesNSDict
       -- LogNSObjectClassName(rNSError) --should log 'NSError' or 'No Object' if no error

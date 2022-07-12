@@ -19,17 +19,17 @@ import module org.openxtalk.library.macosnativeapptools
   foreign type CGImageRef
   foreign type CGPoint
   foreign type NSRange
-  foreign handler ObjC_NSArrayAlloc() returns ObjcRetainedId
-  foreign handler ObjC_NSArrayComponentsJoinedByString(in pObj as ObjcId, in pSeperator as ObjcId) returns ObjcId
-  handler NSArrayToString(in pNSArray as ObjcObject) returns String
   handler getIntegerFromFourCharCodeLittleEndian(in pStr as String) returns optional Uint32
   handler getIntegerFromFourCharCodeBigEndian(in pStr as String) returns optional Uint32
   handler getFourCharCodeFromUint32(in pNum as optional any) returns optional String
   handler getBitFeild(in pNum as optional any) returns optional String
+  handler macOSVersion() returns String
   handler appleScriptObjTests(in pAppleScript as String) returns any
   handler GetrCurrentUserHome() returns any
+  handler RevealFileInFinder(in pFilePath as String) returns Boolean
   handler GetHFSCreatorTypeCodesOfFile(in pAppleScript as String) returns any
   handler SetHFSCreatorCodeOfFile(in pPathToFile as String, in pFourCharOSType as String) returns any
+  handler SetHFSTypeCodeOfFile(in pPathToFile as String, in pFourCharOSType as String) returns any
   handler SetDockTileBadge(in badgeText as String) returns nothing
   handler RequestUserAttention(in criticalRequest as Boolean) returns nothing
   handler DownloadFileFinished(in badgeText as String) returns nothing
@@ -47,6 +47,8 @@ import module org.openxtalk.library.macosnativeapptools
   handler Deminiaturize(in windowID as Number) returns nothing
   handler IsMiniaturized(in windowID as Number) returns Boolean
   handler AppHide() returns nothing
+  handler UnifyTitleAndToolbar(in windowID as Number) returns nothing
+  handler MergeAllWindows(in windowID as Number) returns nothing
   handler AppUnhide() returns nothing
   handler GetFrontmostApplication(in pReturnType as optional String) returns any
   handler GetRunningApplications() returns String
