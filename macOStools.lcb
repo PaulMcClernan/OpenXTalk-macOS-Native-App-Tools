@@ -34,8 +34,8 @@ private variable sMyWindowController as optional ObjcObject
 
 --------------------- foreign handlers -------------------------------
 
-public foreign handler objC_NSArrayAlloc() returns ObjcRetainedId binds to "objc:NSArray.+alloc"
-public foreign handler objC_NSArrayComponentsJoinedByString(in pObj as ObjcId, in pSeperator as ObjcId) returns ObjcId binds to "objc:NSArray.-componentsJoinedByString:"
+private foreign handler objC_NSArrayAlloc() returns ObjcRetainedId binds to "objc:NSArray.+alloc"
+private foreign handler objC_NSArrayComponentsJoinedByString(in pObj as ObjcId, in pSeperator as ObjcId) returns ObjcId binds to "objc:NSArray.-componentsJoinedByString:"
 
 private foreign handler objC_NSApplicationSharedApplication() returns ObjcId binds to "objc:NSApplication.+sharedApplication"
 private foreign handler objC_NSApplicationRequestUserAttention(in sharedApplication as ObjcId, in requestType as CLong) returns CLong binds to "objc:NSApplication.-requestUserAttention:"
