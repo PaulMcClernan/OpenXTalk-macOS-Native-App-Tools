@@ -48,6 +48,7 @@ import module org.openxtalk.library.macosnativeapptools
   handler IsMiniaturized(in windowID as Number) returns Boolean
   handler AppHide() returns nothing
   handler UnifyTitleAndToolbar(in windowID as Number) returns nothing
+  handler MergeWindowWithWindow(in pTargetWindowID as Number, in pMergeWindowID as Number) returns nothing
   handler MergeAllWindows(in windowID as Number) returns nothing
   handler AppUnhide() returns nothing
   handler GetFrontmostApplication(in pReturnType as optional String) returns any

@@ -52,6 +52,7 @@
   <handler name="IsMiniaturized" parameters="in integer" return="boolean"/>
   <handler name="AppHide" parameters="" return="nothing"/>
   <handler name="UnifyTitleAndToolbar" parameters="in integer" return="nothing"/>
+  <handler name="MergeWindowWithWindow" parameters="in integer,in integer" return="nothing"/>
   <handler name="MergeAllWindows" parameters="in integer" return="nothing"/>
   <handler name="AppUnhide" parameters="" return="nothing"/>
   <handler name="GetFrontmostApplication" parameters="in optional string" return="any"/>

@@ -128,6 +128,8 @@ private foreign handler ObjC_NSWindowCreateWithViewController(in pNSViewControll
 private foreign handler ObjC_NSWindowDealloc(in pNSViewController as ObjcId) returns nothing binds to "objc:NSWindow.-dealloc"
 private foreign handler ObjC_NSWindowSetContentView(in pNSWindow as ObjcId, in pNSView as ObjcId) returns nothing binds to "objc:NSWindow.-setContentView:"
 private foreign handler ObjC_NSWindowSetValueForKey( in pNSWindow as ObjcId, in pValue as ObjcRetainedId, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
+private foreign handler ObjC_NSWindowGetValueForKey( in pNSWindow as ObjcId, in pSelector as ObjcId) returns optional ObjcId binds to "objc:NSWindow.-valueforKey:"
+
 private foreign handler ObjC_NSWindowSIntValueForKey( in pNSWindow as ObjcId, in pValue as CSInt, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
 private foreign handler ObjC_NSWindowUIntValueForKey( in pNSWindow as ObjcId, in pValue as CUInt, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
 
@@ -148,7 +150,7 @@ private foreign handler ObjC_NSWindowSetTabbingModeNSObj(in pNSWindow as ObjcId,
 
 private foreign handler ObjC_NSWindowTabbedWindows(in pNSWindow as ObjcId) returns optional any binds to "objc:NSWindow.tabbedWindows"
 
-private foreign handler ObjC_NSWindowAllowsAutoTabbing(in pNSWindow as ObjcId) returns optional CBool binds to "objc:NSWindow.allowsAutomaticWindowTabbing:"
+private foreign handler ObjC_NSWindowAllowsAutoTabbing(in pNSWindow as ObjcId) returns optional CBool binds to "objc:NSWindow.-allowsAutomaticWindowTabbing:"
 private foreign handler objC_NSWindowMergeAllWindowsMth( in pNSWindow as ObjcId, in pSenderNSObj as optional ObjcId ) returns nothing binds to "objc:NSWindow.mergeAllWindows:"
 private foreign handler objC_NSWindowMergeAllWindows(in pNSWindow1 as ObjcId, in pSenderID as optional ObjcId ) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
 private foreign handler objC_NSWindowMergeWindows(in pNSWindow as optional ObjcId, in pSenderID as optional ObjcId) returns nothing binds to "objc:NSWindow.-mergeAllWindows:"
@@ -156,7 +158,12 @@ private foreign handler objC_NSWindowMergeWindows(in pNSWindow as optional ObjcI
 private foreign handler ObjC_NSWindowToggleTabBar(in pNSWindow as ObjcId, in pSenderID as optional ObjcId) returns nothing binds to "objc:NSWindow.-toggleTabBar:"
 private foreign handler ObjC_NSWindowToggleTabOverview(in pNSWindow as ObjcId, in pSenderID as ObjcId) returns nothing binds to "objc:NSWindow.-toggleTabOverview:"
 
-private foreign handler ObjC_NSWindowAddTabbedWindow(in pNSWindow as ObjcId, in tSender as optional ObjcId, in pNSWindowOrderingMode as CInt ) returns nothing binds to "objc:NSWindow.-addTabbedWindow:ordered:"
+-- private foreign handler ObjC_NSWindowTabGroupAlloc() returns ObjcRetainedId binds to "objc:NSWindowTabGroup.+alloc"
+private foreign handler ObjC_NSWindowTabGroupInit(in pNSWindow as ObjcRetainedId) returns optional ObjcId binds to "objc:NSWindow.-tabGroup"
+private foreign handler ObjC_NSWindowTabGroupAddWindow(in pNSWindowTabGroup as ObjcRetainedId, in pNSWindow as optional ObjcId) returns nothing binds to "objc:NSWindowTabGroup.-addWindow:"
+-- Adds a window to the tab group.
+
+private foreign handler ObjC_NSWindowAddTabbedWindow(in pNSWindow as ObjcId, in tSender as optional ObjcId, in pNSWindowOrderingMode as CUInt ) returns nothing binds to "objc:NSWindow.-addTabbedWindow:ordered:"
 
 -- NSStringFromRect is handy when used in conjunction with Log for printing debug messages:
 private foreign handler c_NSStringFromRect(in pNSRect as NSRect) returns ObjcId binds to "c:NSStringFromRect"
@@ -175,7 +182,7 @@ private foreign handler ObjC_NSWindowGetWindowController(in pNSWindow as ObjcId)
 private foreign handler ObjC_NSWindowGetRootViewController(in pNSWindow as ObjcId) returns ObjcId binds to "objc:NSWindow.rootViewController"
 
 private foreign handler ObjC_NSWindowSetBoolValueForKey( in pNSWindow as ObjcId, in pValue as CBool, in pSelector as ObjcId) returns nothing binds to "objc:NSWindow.-setValue:forKey:"
-private foreign handler ObjC_NSWindowGetBoolValueForKey( in pNSWindow as ObjcId, in pSelector as ObjcId) returns CBool binds to "objc:NSWindow.-value:ForKey:"
+private foreign handler ObjC_NSWindowGetBoolValueForKey( in pNSWindow as ObjcId, in pSelector as ObjcId) returns CBool binds to "objc:NSWindow.-valueForKey:"
 
 
 private foreign handler ObjC_NSWindowControllerAlloc() returns ObjcRetainedId binds to "objc:NSWindowController.+alloc"
@@ -1109,6 +1116,8 @@ public handler UnifyTitleAndToolbar( in pWindowID as Integer ) returns nothing
 end handler
 
 
+-- NSWindowTabGroup
+
 /**
 */
 -- private variable mNSObj as optional ObjcObject
@@ -1116,7 +1125,12 @@ public handler MergeWindowWithWindow( in pTargetWindowID as Integer,  in pMergeW
    variable rType as optional any
    variable rBool as optional Boolean
    variable sharedApplication as ObjcId
-   variable tNSWindow as optional ObjcObject
+   variable tNSWindowA as optional ObjcObject
+   variable tNSWindowB as optional ObjcObject
+   variable tString as optional String
+
+   variable tNSWindowTabGroup as optional ObjcObject
+
    variable tNSWindowController as optional ObjcId
    variable tNSWindowContentViewController as optional ObjcId
    variable tNSAppearance as optional ObjcId
@@ -1125,34 +1139,58 @@ public handler MergeWindowWithWindow( in pTargetWindowID as Integer,  in pMergeW
 	if (the operating system is "mac") then
 		unsafe
 
-			put _NSWindowFromWindowID(pTargetWindowID) into tNSWindow
-         LogNSObjectClassName(pTargetWindowID)
+			put _NSWindowFromWindowID(pTargetWindowID) into tNSWindowA
+         LogNSObjectClassName(tNSWindowA)
+         put _NSWindowFromWindowID(pMergeWindowID) into tNSWindowB
+         LogNSObjectClassName(tNSWindowA)
 
-         ObjC_NSWindowSetTabbingModeNSObj(tNSWindow,StringToNSString("tabbingMode"))
-         put ObjC_NSWindowTabbedWindows(tNSWindow) into rType
-         log rType
+         -- ObjC_NSWindowSetTabbingModeNSObj(tNSWindowA,StringToNSString("tabbingModePreferred"))
+         --objC_NSObjectSetValueForKey(tNSWindowB,StringToNSString("tabbingModePreferred",StringToNSString("NSWindowTabbingModePreferred"))
+
+         -- ObjC_NSWindowSetTabbingModeNSObj(tNSWindowB,StringToNSString("tabbingModePreferred"))
+
+         put ObjC_NSObjectGetValueForKey(tNSWindowA,StringToNSString("tabbingIdentifier")) into tNSObj
+         -- LogNSObjectClassName(tNSObj) -- "__NSCFString"
+
+         put StringFromNSString(tNSObj) into tString
+         log tString -- "com_runrev_livecode_MCWindow-com_runrev_livecode_MCWindowDelegate-(null)-VT-FS"
+
+         objC_NSObjectSetValueForKey(tNSWindowB,tNSObj,StringToNSString("tabbingIdentifier"))
+         -- put ObjC_NSWindowTabbedWindows(tNSWindowA) into rType
+         -- log rType
+
+         --- put ObjC_NSWindowTabGroupAlloc() into tNSWindowTabGroup
+         -- put ObjC_NSWindowTabGroupInit(tNSWindowA) into tNSWindowTabGroup
+         -- LogNSObjectClassName(tNSWindowTabGroup)
+         -- Concrete type of AppKit’s default tabGroup instance of "NSWindowStackController", which appears to be a private NS-type.
+
+         -- ObjC_NSWindowTabGroupAddWindow(tNSWindowTabGroup, tNSWindowB)
          ------------------------------------------------------------------- It seems thst LiveCode stack windows on macOS are  customized class of NSWindow
          -- LogNSObjectClassName(tNSWindow) -- logs the class name as "com_runrev_livecode_MCWindow"
          -- put ObjC_NSWindowGetWindowController(tNSWindow) into tNSWindowController
          -- put ObjC_NSWindowGetWindowController(tNSWindow) into tNSWindowController
-         put ObjC_NSWindowGetRootViewController(tNSWindow) into tNSWindowController
+         -- put ObjC_NSWindowGetRootViewController(tNSWindowA) into tNSWindowController
          -- window.rootViewController
-         LogNSObjectClassName(tNSWindowController)
+         -- LogNSObjectClassName(tNSWindowController)
 
          --------- create an NSWindowController and attaches it to the Stack Window:
          put ObjC_NSWindowControllerAlloc() into tNSWindowContentViewController
-         put ObjC_NSWindowControllerInitWithWindow(tNSWindowContentViewController,pTargetWindowID) into tNSWindowContentViewController
+         put ObjC_NSWindowControllerInitWithWindow(tNSWindowContentViewController,tNSWindowA) into tNSWindowContentViewController
+         ObjC_NSWindowToggleTabBar( tNSWindowA, tNSWindowA )
 
-         objC_NSWindowMergeWindows( pTargetWindowID, pTargetWindowID)
-         -- ObjC_NSWindowAddTabbedWindow (tNSWindowContentViewController, tNSWindow, 1 ) -- 1 = Above, -1 = Bellow, 0 = Out or Off-screen
+         -- objC_NSWindowMergeWindows( pTargetWindowID, pTargetWindowID)
+         -- ObjC_NSWindowAddTabbedWindow (tNSWindowA, tNSWindowB, 1 ) -- 1 = Above, -1 = Bellow, 0 = Out or Off-screen
 
-         --put ObjC_NSWindowAllowsAutoTabbing( tNSWindow ) into rBool
-         -- log rBools
+         --put ObjC_NSWindowAllowsAutoTabbing( tNSWindowA) into rBool
+         -- log rBool
+         -- put ObjC_NSWindowGetBoolValueForKey(tNSWindowContentViewController,StringToNSString("allowsAutomaticWindowTabbing")) into rBool
+         -- log rBool
+
          -- ObjC_NSWindowToggleTabBar(tNSWindow, tNSWindow)
           -- ObjC_NSWindowToggleTabOverview(tNSWindow, tNSWindow)
           -- objC_NSWindowMergeAllWindows(tNSWindow)
 
-          objC_NSWindowMergeAllWindowsMth(tNSWindow,tNSWindow)
+          -- objC_NSWindowMergeAllWindowsMth(tNSWindowA,tNSWindowB)
 
 		end unsafe
 	end if
@@ -1183,7 +1221,7 @@ public handler MergeAllWindows( in pWindowID as Integer ) returns nothing
          -- put objC_NSObjectGetValueForKey( NSObj,StringToNSString("selector")) into rType
 
       -- return NumberFromNSNumber(rGain)
-			-- put objC_NSApplicationSharedApplication() into sharedApplication
+			 put objC_NSApplicationSharedApplication() into sharedApplication
          -- objC_NSApplicationMergeAllWindows( sharedApplication )
          -- put objC_NSObjectGetValueForKey( sharedApplication,StringToNSString("allowsAutomaticWindowTabbing")) into rBool
          -- log rBool
@@ -1193,18 +1231,18 @@ public handler MergeAllWindows( in pWindowID as Integer ) returns nothing
 
          -- put ObjC_NSWindowGetBoolValueForKey(tNSWindow,StringToNSString("allowsAutomaticWindowTabbing")) into rBool
          -- ObjC_NSWindowGetBoolValueForKey(tNSWindow,true,StringToNSString("allowsAutomaticWindowTabbing"))
-         -- ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("allowsAutomaticWindowTabbing"))
+         ObjC_NSWindowSetBoolValueForKey(tNSWindow,true,StringToNSString("allowsAutomaticWindowTabbing"))
          -- ObjC_NSWindowSIntValueForKey(tNSWindow,1,StringToNSString("NSWindowTabbingModePreferred"))
          -- above yeilds <com_runrev_livecode_MCWindow 0x7fdb2369a950> setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key NSWindowTabbingModePreferred.
          -- ObjC_NSWindowSIntValueForKey(tNSWindow,1,StringToNSString("tabbingModePreferred"))
          -- above yeilds same
-         -- ObjC_NSWindowUIntValueForKey(tNSWindow,1,StringToNSString("NSWindowTabbingMode"))
+         ObjC_NSWindowUIntValueForKey(tNSWindow,1,StringToNSString("tabbingMode"))
 
         -- ObjC_NSWindowToggleTabBar( tNSWindow, tNSWindow )
          -- ObjC_NSWindowTabbingModeNSObj(tNSWindow,NumberToNSNumber(1))
          -- ObjC_NSWindowTabbingModeInt(tNSWindow, 1 )
          ObjC_NSWindowSetTabbingModeNSObj(tNSWindow,StringToNSString("tabbingMode"))
-         put ObjC_NSWindowTabbedWindows(tNSWindow) into rBool
+         -- put ObjC_NSWindowTabbedWindows(tNSWindow) into tNSObj
          log rBool
          ------------------------------------------------------------------- It seems thst LiveCode stack windows on macOS are  customized class of NSWindow
          -- LogNSObjectClassName(tNSWindow) -- logs the class name as "com_runrev_livecode_MCWindow"
@@ -1220,7 +1258,6 @@ public handler MergeAllWindows( in pWindowID as Integer ) returns nothing
          put ObjC_NSWindowControllerAlloc() into tNSWindowContentViewController
          put ObjC_NSWindowControllerInitWithWindow(tNSWindowContentViewController,tNSWindow) into tNSWindowContentViewController
          -- NSWindowController.LoadWindow Method
-
          --log tNSWindowContentViewController
          LogNSObjectClassName(tNSWindowContentViewController)
 
