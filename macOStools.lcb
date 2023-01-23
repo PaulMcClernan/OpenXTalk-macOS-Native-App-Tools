@@ -918,12 +918,15 @@ end handler
 Assign the macOS native "Vibrant Dark" appearance style to all app windows
 
 Example:
-setAppToDarkMode the windowID of this stack
+setAppToDarkMode
 
 Description:
-This sets an Apps appearance to Dark Mode, with all app windows inheriting the dark appearance
+This sets an Apps appearance to Dark Mode, with all app windows inheriting the
+dark appearance.
+
+NOTE your existing stacks may need to be edited for a proper look when in darkMode.
 */
-public handler setAppToDarkMode() returns nothing
+public handler setAppToDarkMode()
 	if (the operating system is "mac") then
       variable tSharedApplication as ObjcId
       -- variable tResults as CLong
@@ -940,12 +943,12 @@ end handler
 Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
 
 Example:
-setAppToDarkMode the windowID of this stack
+setAppToDarkMode
 
 Description:
 This sets an Apps appearance to Light Mode, with all app windows inheriting the dark appearance
 */
-public handler setAppToLightMode() returns nothing
+public handler setAppToLightMode()
 	if (the operating system is "mac") then
       variable tSharedApplication as ObjcId
 		unsafe
