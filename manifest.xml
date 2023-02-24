@@ -7,13 +7,13 @@
   <type>library</type>
   <requires name="com.livecode.objc"/>
   <requires name="com.livecode.foreign"/>
+  <requires name="com.livecode.engine"/>
   <requires name="com.livecode.arithmetic"/>
   <requires name="com.livecode.binary"/>
   <requires name="com.livecode.list"/>
   <requires name="com.livecode.logic"/>
   <requires name="com.livecode.string"/>
   <requires name="com.livecode.type"/>
-  <requires name="com.livecode.engine"/>
   <requires name="com.livecode.byte"/>
   <requires name="com.livecode.char"/>
   <requires name="com.livecode.math"/>
@@ -35,6 +35,7 @@
   <handler name="SetHFSCreatorCodeOfFile" parameters="in string,in string" return="any"/>
   <handler name="SetHFSTypeCodeOfFile" parameters="in string,in string" return="any"/>
   <handler name="SetDockTileBadge" parameters="in string" return="nothing"/>
+  <handler name="SetDockTileImage" parameters="in optional string" return="nothing"/>
   <handler name="RequestUserAttention" parameters="in boolean" return="nothing"/>
   <handler name="DownloadFileFinished" parameters="in string" return="nothing"/>
   <handler name="FullScreenAllowed" parameters="in integer,in boolean" return="nothing"/>
@@ -43,8 +44,8 @@
   <handler name="setWindowToDarkMode" parameters="in integer" return="nothing"/>
   <handler name="getNSWindowFrameRect" parameters="in integer" return="string"/>
   <handler name="setWindowToLightMode" parameters="in integer" return="nothing"/>
-  <handler name="setAppToDarkMode" parameters="" return="nothing"/>
-  <handler name="setAppToLightMode" parameters="" return="nothing"/>
+  <handler name="setAppToDarkMode" parameters="" return="any"/>
+  <handler name="setAppToLightMode" parameters="" return="any"/>
   <handler name="PostUserNotification" parameters="in string,in optional string,in optional string,in optional string,in optional string" return="nothing"/>
   <handler name="MiniaturizeAll" parameters="" return="nothing"/>
   <handler name="PerformMiniaturize" parameters="in integer" return="nothing"/>

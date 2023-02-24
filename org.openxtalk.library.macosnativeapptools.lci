@@ -1,13 +1,13 @@
 import module org.openxtalk.library.macosnativeapptools
   use com.livecode.objc
   use com.livecode.foreign
+  use com.livecode.engine
   use com.livecode.arithmetic
   use com.livecode.binary
   use com.livecode.list
   use com.livecode.logic
   use com.livecode.string
   use com.livecode.type
-  use com.livecode.engine
   use com.livecode.byte
   use com.livecode.char
   use com.livecode.math
@@ -31,6 +31,7 @@ import module org.openxtalk.library.macosnativeapptools
   handler SetHFSCreatorCodeOfFile(in pPathToFile as String, in pFourCharOSType as String) returns any
   handler SetHFSTypeCodeOfFile(in pPathToFile as String, in pFourCharOSType as String) returns any
   handler SetDockTileBadge(in badgeText as String) returns nothing
+  handler SetDockTileImage(in pImageScriptObj as optional String) returns nothing
   handler RequestUserAttention(in criticalRequest as Boolean) returns nothing
   handler DownloadFileFinished(in badgeText as String) returns nothing
   handler FullScreenAllowed(in windowID as Number, in isAllowed as Boolean) returns nothing
@@ -39,8 +40,8 @@ import module org.openxtalk.library.macosnativeapptools
   handler setWindowToDarkMode(in windowID as Number) returns nothing
   handler getNSWindowFrameRect(in pWindowID as Number) returns String
   handler setWindowToLightMode(in windowID as Number) returns nothing
-  handler setAppToDarkMode() returns nothing
-  handler setAppToLightMode() returns nothing
+  handler setAppToDarkMode() returns optional any
+  handler setAppToLightMode() returns optional any
   handler PostUserNotification(in postTitle as String, in subTitle as optional String, in informativeText as optional String, in postIdentifier as optional String, in soundName as optional String) returns nothing
   handler MiniaturizeAll() returns nothing
   handler PerformMiniaturize(in windowID as Number) returns nothing

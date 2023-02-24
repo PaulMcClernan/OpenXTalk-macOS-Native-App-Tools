@@ -23,7 +23,7 @@ Syntax: setAppToLightMode()
 
 Summary: Assign the macOS native "Vibrant Light Mode" appearance style to all app windows
 
-Example: setAppToDarkMode the windowID of this stack
+Example: setAppToDarkMode
 
 Description: This sets an Apps appearance to Light Mode, with all app windows inheriting the dark appearance
 
@@ -115,10 +115,13 @@ Syntax: setAppToDarkMode()
 
 Summary: Assign the macOS native "Vibrant Dark" appearance style to all app windows
 
-Example: setAppToDarkMode the windowID of this stack
+Example: setAppToDarkMode
 
-Description: This sets an Apps appearance to Dark Mode, with all app windows inheriting the dark appearance
+Description:
+This sets an Apps appearance to Dark Mode, with all app windows inheriting the
+dark appearance.
 
+NOTE your existing stacks may need to be edited for a proper look when in darkMode.
 
 
 

@@ -10,8 +10,13 @@ A collection of macOS Cocoa AppKit related handlers
 
 library org.openxtalk.library.macosnativeapptools
 
+use com.livecode.engine
 use com.livecode.foreign
 use com.livecode.objc
+use com.livecode.array
+use com.livecode.list
+use com.livecode.binary
+use com.livecode.string
 
 metadata version is "1.0.2"
 metadata author is "Paul McClernan"
@@ -48,6 +53,13 @@ private foreign handler objC_NSApplicationSetAppearance(in pNSApp as ObjcId, in 
 private foreign handler objC_NSApplicationGetAutoWindowTabbing(in pNSApp as ObjcId) returns optional any binds to "objc:NSApplication.-allowsAutomaticWindowTabbing:"
 private foreign handler objC_NSApplicationSetAutoWindowTabbing(in pNSApp as ObjcId, in pAllow as CBool) returns nothing binds to "objc:NSApplication.-setAllowsAutomaticWindowTabbing:"
 
+private foreign handler objC_NSApplicationSetAppIconImage(in pNSApp as ObjcId, in pNSImage as optional ObjcId) returns nothing binds to "objc:NSApplication.-setApplicationIconImage:"
+
+private foreign handler ObjC_NSImageAlloc() returns ObjcRetainedId binds to "objc:NSImage.+alloc"
+private foreign handler ObjC_NSImageInit(in pObj as ObjcRetainedId) returns ObjcId binds to "objc:NSImage.-init"
+private foreign handler ObjC_NSImageInitWithContentsOfFile(in pObj as ObjcId, in pFilename as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:"
+private foreign handler objC_NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
+private foreign handler ObjC_NSImageInitWithData(in pObj as ObjcRetainedId, in pData as ObjcId) returns optional ObjcRetainedId binds to "objc:NSImage.-initWithData:"
 
 private foreign handler objC_NSProcessInfoAlloc() returns ObjcRetainedId binds to "objc:NSProcessInfo.+alloc"
 private foreign handler objC_NSProcessInfoInit(in pInstance as ObjcId) returns ObjcId binds to "objc:NSProcessInfo.-init"
@@ -64,9 +76,6 @@ private foreign handler objC_NSUserNotificationCenterDeliverNotification(in defa
 
 private foreign handler objC_NSDistributedNotificationCenterDefaultCenter() returns ObjcId binds to "objc:NSDistributedNotificationCenter.+defaultCenter"
 private foreign handler objC_NSDistributedNotificationCenterPostNotificationNameObject(in defaultCenter as ObjcId, in notificationName as ObjcId, in notificationObject as ObjcId) returns nothing binds to "objc:NSDistributedNotificationCenter.-postNotificationName:object:"
-
-private foreign handler objC_NSImageInitFromFile(in pPathNSString as ObjcId) returns ObjcId binds to "objc:NSImage.-initWithContentsOfFile:" -- correct!!!
---private foreign handler objC_NSApplicationSetAppIconImage(in sharedApplication as ObjcId, in iconImage as ObjcId) returns ObjcId binds to "objc:NSApplication.-setApplicationIconImage:" -- CHRASH!!!
 
 private foreign handler objC_NSFileManagerSharedManager() returns ObjcId binds to "objc:NSFileManager.+defaultManager"
 private foreign handler objC_NSFileManagerCurrentUserHomeURL(in pNSSharedFilemanager as ObjcId) returns ObjcId binds to "objc:NSFileManager.homeDirectoryForCurrentUser"
@@ -618,6 +627,71 @@ public handler SetDockTileBadge(in badgeText as String) returns nothing
 		objC_NSDockTileDisplay(tNSDockTile)
 		end unsafe
 	end if
+end handler
+
+public handler SetDockTileImage(in pImageScriptObj as optional String) returns nothing
+	variable sharedApplication as ObjcId
+	variable tNSDockTile as ObjcId
+   variable pSharedWorkspace as ObjcObject
+   variable tStatus as Boolean
+   variable tNSImage as optional ObjcObject
+   variable tCIImage as optional ObjcObject
+   variable tCIFilter as optional ObjcObject
+   variable tData as optional Data
+   variable tList as optional List
+   variable tImageDataObj as ObjcId
+   variable tImageData as Data
+   variable tImageReps as ObjcObject
+   variable tImageRepsList as List
+   variable tImageRep as ObjcId
+   variable tBitmapImageRep as ObjcObject
+   variable tCGImageRef as CGImageRef
+   unsafe
+   --  get the dockTile
+   put objC_NSApplicationSharedApplication() into sharedApplication
+   put objC_NSApplicationGetNSDockTile(sharedApplication) into tNSDockTile
+
+   if pImageScriptObj is the empty string or pImageScriptObj is nothing then
+      objC_NSApplicationSetAppIconImage( sharedApplication , nothing)
+   else
+   --- boiler plate for getting the image data
+      variable tObject as optional ScriptObject
+      variable tFile as String
+      resolve script object pImageScriptObj
+      put the result into tObject
+     if tObject exists then
+         put property "filename" of tObject into tFile
+         if tFile is empty then
+            put property "text" of tObject into tData
+            put ObjC_NSImageAlloc() into tNSImage
+            put ObjC_NSImageInitWithData(tNSImage, DataToNSData(tData)) into tNSImage
+         else
+            resolve file tFile relative to tObject
+            if the result is not nothing then
+               put the result into tFile
+            end if
+         end if
+     else
+         resolve file pImageScriptObj
+         if the result is not nothing then
+            put the result into tFile
+         end if
+     end if
+     if tFile is not empty then
+         put ObjC_NSImageAlloc() into tNSImage
+         put ObjC_NSImageInitWithContentsOfFile(tNSImage, StringToNSString(tFile)) into tNSImage
+     end if
+     --- end of boiler plate for getting the image data
+
+      -- objC_NSDockTileSetShowAppBadge(tNSDockTile, true, StringToNSString("showsApplicationBadge"))
+		-- objC_NSDockTileSetBadgeLabelProp(tNSDockTile,StringToNSString(badgeText),StringToNSString("badgeLabel"))
+      -- NSAPPLICATION .applicationIconImage
+      objC_NSApplicationSetAppIconImage( sharedApplication , tNSImage)
+
+      -- tell appKit to redraw the dockTile
+      objC_NSDockTileDisplay(tNSDockTile)
+   end if
+   end unsafe
 end handler
 
 /**
