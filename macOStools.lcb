@@ -1060,6 +1060,10 @@ String values for postTitle and subTitle truncated to a length appropriate for
 display and it's properties modified to reflect any truncations.
 For soundName Pass empty for silent or pass any sound file in any of the OS
 Library/Audio/Sounds folders, if no match is found a default alert sound is used.
+
+NOTE: this is deprecated in macOS 11+, handler needs to be updated to use the newer UNUserNotificationCenter on macOS 10.14+
+https://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notifications?language=objc
+You could also just use AppleScript to send notifications?
 */
 public handler PostUserNotification(in postTitle as String, in subTitle as optional String, in informativeText as optional String, in postIdentifier as optional String, in soundName as optional String) returns nothing
 	if (the operating system is "mac") then
